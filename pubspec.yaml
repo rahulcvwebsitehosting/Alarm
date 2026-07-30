@@ -2,7 +2,7 @@ name: clock_app
 description: A customizable alarm, clock, timer, stopwatch, and voice agent app.
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 0.6.0+28
+version: 0.6.1+29
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -91,7 +91,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
-  dart_code_metrics: ^5.5.1
   change_app_package_name: ^1.1.0
   dependency_validator: ^3.2.3
 
