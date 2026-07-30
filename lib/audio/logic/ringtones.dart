@@ -55,7 +55,8 @@ Future<List<int>> getNRandomRingtoneIndices(int n) async {
   return indices;
 }
 
-const methodChannel = MethodChannel('com.vicolo.chrono/documents');
+const methodChannel =
+    MethodChannel('com.rahulcvwebsitehosting.alarm/documents');
 
 Future<String> getRingtoneUri(FileItem fileItem) async {
   switch (fileItem.type) {

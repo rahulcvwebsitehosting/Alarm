@@ -7,5 +7,5 @@ Future<void> initializePackageInfo() async {
 }
 
 String getAppName() {
-  return '${packageInfo?.appName ?? 'Chrono'}${(packageInfo?.packageName.contains("dev") ?? false) ? " Dev" : ""}';
+  return '${packageInfo?.appName ?? 'Alarm'}${(packageInfo?.packageName.contains("dev") ?? false) ? " Dev" : ""}';
 }

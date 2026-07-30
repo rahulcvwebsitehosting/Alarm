@@ -32,7 +32,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    // namespace "com.vicolo.chrono"
+    namespace "com.rahulcvwebsitehosting.alarm"
 
     compileSdkVersion 34
     ndkVersion flutter.ndkVersion
@@ -52,7 +52,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.vicolo.chrono"
+        applicationId "com.rahulcvwebsitehosting.alarm"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()  
@@ -94,12 +94,12 @@ android {
     productFlavors {
       prod {
         dimension "app"
-        resValue "string", "app_name", "Chrono"
+        resValue "string", "app_name", "Alarm"
       }
 
       dev {
         dimension "app"
-        resValue "string", "app_name", "Chrono Dev"
+        resValue "string", "app_name", "Alarm Dev"
         // versionNameSuffix "-dev",
         applicationIdSuffix ".dev"
       }
@@ -120,4 +120,3 @@ android {
 flutter {
     source '../..'
 }
-

@@ -67,6 +67,7 @@ void updateDigitalClockWidget() {
   HomeWidget.updateWidget(
     androidName: 'DigitalClockWidgetProvider',
     name: 'DigitalClockWidgetProvider',
-    qualifiedAndroidName: 'com.vicolo.chrono.DigitalClockWidgetProvider',
+    qualifiedAndroidName:
+        'com.rahulcvwebsitehosting.alarm.DigitalClockWidgetProvider',
   );
 }

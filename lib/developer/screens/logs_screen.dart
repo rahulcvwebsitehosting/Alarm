@@ -163,7 +163,7 @@ class _LogsScreenState extends State<LogsScreen> {
                   final result = await FilePicker.platform.saveFile(
                     bytes: await file.readAsBytes(),
                     fileName:
-                        "chrono_logs_${DateTime.now().toIso8601String().split(".")[0]}.txt",
+                        "alarm_logs_${DateTime.now().toIso8601String().split(".")[0]}.txt",
                   );
                   if (result != null) {
                     if (context.mounted) {

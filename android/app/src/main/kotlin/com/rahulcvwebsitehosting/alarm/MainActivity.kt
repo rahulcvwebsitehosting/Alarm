@@ -1,4 +1,4 @@
-package com.vicolo.chrono
+package com.rahulcvwebsitehosting.alarm
 
 import android.content.Context
 import android.content.Intent
@@ -15,7 +15,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
 class MainActivity: FlutterActivity() {
-    private val CHANNEL = "com.vicolo.chrono/alarm"
+    private val CHANNEL = "com.rahulcvwebsitehosting.alarm/alarm"
     
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

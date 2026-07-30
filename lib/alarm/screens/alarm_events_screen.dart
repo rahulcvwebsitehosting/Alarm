@@ -93,7 +93,7 @@ class _AlarmEventsScreenState extends State<AlarmEventsScreen> {
                 await FilePicker.platform.saveFile(
                   bytes: Uint8List.fromList(utf8.encode(listToString(events))),
                   fileName:
-                      "chrono_alarm_events_${DateTime.now().toIso8601String().split(".")[0]}.json",
+                      "alarm_events_${DateTime.now().toIso8601String().split(".")[0]}.json",
                 );
               } catch (e) {
                 logger.e("Error saving alarm events file: ${e.toString()}");

@@ -1,5 +1,5 @@
 
-package com.vicolo.chrono
+package com.rahulcvwebsitehosting.alarm
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -31,7 +31,7 @@ class DigitalClockWidgetProvider : HomeWidgetProvider() {
         widgetData: SharedPreferences,
     ) { // Perform this loop procedure for each widget that belongs to this
         // provider.
-        Log.d("CHRONO", "Updating Digital Clock Widget")
+        Log.d("ALARM", "Updating Digital Clock Widget")
 
         appWidgetIds.forEach { appWidgetId ->
             // Create an Intent to launch ExampleActivity.
@@ -188,7 +188,7 @@ class DigitalClockWidgetProvider : HomeWidgetProvider() {
                         HomeWidgetLaunchIntent.getActivity(
                             context,
                             MainActivity::class.java,
-                            Uri.parse("chrono://digitalClockClicked"),
+                            Uri.parse("alarm://digitalClockClicked"),
                         )
                     setOnClickPendingIntent(textClock, pendingIntentWithData)
                     setOnClickPendingIntent(textDate, pendingIntentWithData)

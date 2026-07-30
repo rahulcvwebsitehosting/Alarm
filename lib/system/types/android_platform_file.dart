@@ -25,7 +25,8 @@ class AndroidFile {
             size: file.lengthSync(),
             modifiedDate: file.lastModifiedSync());
 
-  static const methodChannel = MethodChannel('com.vicolo.chrono/documents');
+  static const methodChannel =
+      MethodChannel('com.rahulcvwebsitehosting.alarm/documents');
 
   Stream<List<int>> openRead() async* {
     const int chunkSize = 1024 * 1024; // 1MB
@@ -61,7 +62,8 @@ class AndroidFolder {
 
   AndroidFolder({this.uri, this.path});
 
-  static const methodChannel = MethodChannel('com.vicolo.chrono/documents');
+  static const methodChannel =
+      MethodChannel('com.rahulcvwebsitehosting.alarm/documents');
 
   Future<List<AndroidFile>> files() async {
     if (path != null) {

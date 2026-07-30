@@ -1,5 +1,5 @@
 name: clock_app
-description: An alarm, clock, timer and stowatch app.
+description: A customizable alarm, clock, timer, stopwatch, and voice agent app.
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.6.0+28
@@ -49,10 +49,7 @@ dependencies:
   #   path: "../flutter_show_when_locked/"
   # flex_color_picker:
   #   path: ../flex_color_picker
-  flex_color_picker:
-    git:
-      url: https://github.com/vicolo-dev/flex_color_picker
-      ref: master
+  flex_color_picker: 3.3.0
   url_launcher: ^6.2.2
   flutter_html: ^3.0.0-beta.2
   http: ^1.2.0
@@ -75,11 +72,7 @@ dependencies:
       path: packages/home_widget/
   permission_handler: ^11.3.1
   device_info_plus: ^10.1.0
-  flutter_foreground_task:
-    # path: "../flutter_foreground_task"
-    git:
-      url: https://github.com/vicolo-dev/flutter_foreground_task
-      ref: master
+  flutter_foreground_task: 6.5.0
   logger: ^2.4.0
   flutter_animate: ^4.5.0
   quick_actions: ^1.0.7
@@ -111,9 +104,6 @@ flutter:
   assets:
     - assets/timezones.db
     - assets/images/
-    - assets/contributors/
-    - assets/contributors/avatars/
-    - assets/patreons/
     - assets/ringtones/
   fonts:
     - family: Rubik

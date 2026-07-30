@@ -1,4 +1,4 @@
-package com.vicolo.chrono
+package com.rahulcvwebsitehosting.alarm
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager

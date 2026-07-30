@@ -8,7 +8,7 @@ Future<String?> saveBackupFile(String data) async {
   return await FilePicker.platform.saveFile(
     bytes: Uint8List.fromList(utf8.encode(data)),
     fileName:
-        "chrono_backup_${DateTime.now().toIso8601String().split(".")[0]}.json",
+        "alarm_backup_${DateTime.now().toIso8601String().split(".")[0]}.json",
   );
 }
 

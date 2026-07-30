@@ -32,8 +32,9 @@ class AiParser {
             headers: const {
               'Authorization': 'Bearer $_apiKey',
               'Content-Type': 'application/json',
-              'HTTP-Referer': 'https://chrono.app',
-              'X-Title': 'Chrono Alarm',
+              'HTTP-Referer':
+                  'https://github.com/rahulcvwebsitehosting/Alarm',
+              'X-Title': 'Alarm Voice Agent',
             },
             body: jsonEncode({
               'model': 'mistralai/mistral-7b-instruct:free',
