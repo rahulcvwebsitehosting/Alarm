@@ -1,5 +1,3 @@
-// import 'package:clock_app/common/widgets/color_picker/color_picker.dart';
-import 'package:clock_app/common/widgets/color_picker/picker_selector.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -110,13 +108,6 @@ class _ColorBottomSheetState extends State<ColorBottomSheet> {
                     opacityThumbRadius: 14,
                     copyPasteBehavior: const ColorPickerCopyPasteBehavior(
                         copyFormat: ColorPickerCopyFormat.hexRRGGBB),
-                    customPickerSelectBuilder:
-                        (pickers, pickerLabels, activePicker, onPickerChanged) {
-                      return PickerSelector(
-                          pickers: pickers,
-                          picker: activePicker,
-                          onPickerChanged: onPickerChanged);
-                    }
 
                     // subheading: Text(
                     //   'Select color shade',
