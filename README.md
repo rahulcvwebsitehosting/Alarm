@@ -21,8 +21,8 @@ requests into scheduled alarms.
 
 ## Voice alarm setup
 
-The voice agent uses `speech_to_text` for transcription and a free OpenRouter
-model for structured alarm parsing. Keep the API key outside source control:
+The voice agent uses `speech_to_text` for transcription and OpenRouter's
+free-model router for alarm parsing. Keep the API key outside source control:
 
 ```sh
 flutter run --flavor dev \
@@ -38,12 +38,12 @@ flutter build apk --release --split-per-abi --flavor prod \
 
 Example voice requests:
 
-- “Remind me every day at 7 AM to cook breakfast.”
-- “Wake me at 6:30 on weekdays.”
-- “Set an alarm for Saturday at 9 AM.”
+- "Remind me every day at 7 AM to cook breakfast."
+- "Wake me at 6:30 on weekdays."
+- "Set an alarm for Saturday at 9 AM."
 
-Only OpenRouter model identifiers ending in `:free` should be configured in
-the voice parser.
+The parser uses `openrouter/free`, which routes exclusively to currently
+available free models, with a specific `:free` model as a fallback.
 
 ## Development
 

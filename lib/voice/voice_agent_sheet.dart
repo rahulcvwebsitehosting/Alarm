@@ -100,8 +100,8 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
 
     if (result == null) {
       _showError(
-        'Could not understand the alarm. Check your internet connection and '
-        'OpenRouter API key, then try again.',
+        AiParser.failureMessage ??
+            'Could not understand the alarm. Please try again.',
       );
       return;
     }

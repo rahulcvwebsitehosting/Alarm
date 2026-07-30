@@ -28,6 +28,7 @@ class ParsedAlarm {
     final recurrence =
         json['recurrence']?.toString().trim().toLowerCase() ?? 'once';
     final rawDays = json['days'];
+    final label = json['label']?.toString().trim() ?? '';
 
     return ParsedAlarm(
       hour: parsedHour,
@@ -40,7 +41,7 @@ class ParsedAlarm {
               .where((day) => day.isNotEmpty)
               .toList(growable: false)
           : const [],
-      label: json['label']?.toString().trim() ?? '',
+      label: _toTitleCase(label),
     );
   }
 
@@ -65,5 +66,13 @@ class ParsedAlarm {
     final parsed = value is int ? value : int.tryParse(value.toString());
     if (parsed == null || parsed < minimum || parsed > maximum) return null;
     return parsed;
+  }
+
+  static String _toTitleCase(String value) {
+    return value
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .map((word) => '${word[0].toUpperCase()}${word.substring(1)}')
+        .join(' ');
   }
 }
