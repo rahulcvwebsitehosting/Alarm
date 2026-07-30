@@ -31,6 +31,12 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def hasReleaseSigning = keystorePropertiesFile.exists() &&
+        keystoreProperties['keyAlias'] &&
+        keystoreProperties['keyPassword'] &&
+        keystoreProperties['storePassword'] &&
+        file('release-key.jks').exists()
+
 android {
     namespace "com.rahulcvwebsitehosting.alarm"
 
@@ -61,16 +67,22 @@ android {
     }
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile = file('release-key.jks')
-            storePassword keystoreProperties['storePassword']        
+            if (hasReleaseSigning) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile = file('release-key.jks')
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            // CI can produce an installable release APK before a private
+            // production keystore is configured.
+            signingConfig hasReleaseSigning
+                    ? signingConfigs.release
+                    : signingConfigs.debug
 
             minifyEnabled true
             shrinkResources true
