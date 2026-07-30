@@ -78,8 +78,8 @@ android {
 
     buildTypes {
         release {
-            // CI can produce an installable release APK before a private
-            // production keystore is configured.
+            // Tagged CI releases always configure the permanent signing key.
+            // The debug fallback keeps local development builds usable.
             signingConfig hasReleaseSigning
                     ? signingConfigs.release
                     : signingConfigs.debug

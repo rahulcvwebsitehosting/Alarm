@@ -36,6 +36,11 @@ flutter build apk --release --split-per-abi --flavor prod \
   --dart-define=OPENROUTER_API_KEY=your_openrouter_key
 ```
 
+Official GitHub releases use a persistent Android signing key stored in
+encrypted Actions secrets, allowing future APK versions to install as updates.
+Keep `android/key.properties` and `android/app/release-key.jks` private when
+building signed releases locally.
+
 Example voice requests:
 
 - "Remind me every day at 7 AM to cook breakfast."
