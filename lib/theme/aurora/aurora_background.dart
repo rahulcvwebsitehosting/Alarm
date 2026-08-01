@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 
 /// A resolution-independent ambient background. The painter uses gradients,
@@ -40,20 +41,17 @@ class _AuroraBackgroundState extends State<AuroraBackground>
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return RepaintBoundary(
       child: Stack(
         fit: StackFit.expand,
         children: [
-          ColoredBox(color: scheme.background),
+          const ColoredBox(color: DopamineTokens.cosmic),
           IgnorePointer(
             child: AnimatedBuilder(
               animation: _controller,
               builder: (context, _) => CustomPaint(
                 painter: _AuroraPainter(
                   progress: _controller.value,
-                  scheme: scheme,
-                  brightness: Theme.of(context).brightness,
                 ),
               ),
             ),
@@ -68,31 +66,28 @@ class _AuroraBackgroundState extends State<AuroraBackground>
 class _AuroraPainter extends CustomPainter {
   const _AuroraPainter({
     required this.progress,
-    required this.scheme,
-    required this.brightness,
   });
 
   final double progress;
-  final ColorScheme scheme;
-  final Brightness brightness;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dark = brightness == Brightness.dark;
     final phase = progress * math.pi * 2;
+    _paintStripes(canvas, size);
+    _paintDots(canvas, size);
     _paintGlow(
       canvas,
       size,
       Offset(size.width * (.12 + .08 * math.sin(phase)), size.height * .08),
       size.longestSide * .72,
-      scheme.primary.withOpacity(dark ? .25 : .16),
+      DopamineTokens.magenta.withOpacity(.22),
     );
     _paintGlow(
       canvas,
       size,
       Offset(size.width * (.88 + .06 * math.cos(phase)), size.height * .38),
       size.longestSide * .62,
-      scheme.tertiary.withOpacity(dark ? .18 : .12),
+      DopamineTokens.cyan.withOpacity(.18),
     );
     _paintGlow(
       canvas,
@@ -100,8 +95,57 @@ class _AuroraPainter extends CustomPainter {
       Offset(
           size.width * (.42 + .12 * math.cos(phase * .7)), size.height * .94),
       size.longestSide * .58,
-      scheme.secondary.withOpacity(dark ? .14 : .10),
+      DopamineTokens.purple.withOpacity(.20),
     );
+    _paintSparkles(canvas, size, phase);
+  }
+
+  void _paintStripes(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = DopamineTokens.yellow.withOpacity(.045)
+      ..strokeWidth = 8;
+    for (double x = -size.height; x < size.width; x += 42) {
+      canvas.drawLine(
+          Offset(x, 0), Offset(x + size.height, size.height), paint);
+    }
+  }
+
+  void _paintDots(Canvas canvas, Size size) {
+    final paint = Paint()..color = DopamineTokens.magenta.withOpacity(.13);
+    for (double y = 18; y < size.height; y += 28) {
+      for (double x = 14; x < size.width; x += 28) {
+        canvas.drawCircle(Offset(x, y), 1.35, paint);
+      }
+    }
+  }
+
+  void _paintSparkles(Canvas canvas, Size size, double phase) {
+    final points = <(Offset, Color, double)>[
+      (Offset(size.width * .10, size.height * .16), DopamineTokens.yellow, 7),
+      (Offset(size.width * .86, size.height * .12), DopamineTokens.cyan, 5),
+      (Offset(size.width * .78, size.height * .64), DopamineTokens.orange, 8),
+      (Offset(size.width * .18, size.height * .80), DopamineTokens.magenta, 6),
+    ];
+    for (var i = 0; i < points.length; i++) {
+      final item = points[i];
+      final pulse = .75 + .25 * math.sin(phase + i);
+      final paint = Paint()..color = item.$2.withOpacity(.45 * pulse);
+      final r = item.$3 * pulse;
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromCenter(center: item.$1, width: r * 2, height: r * .7),
+          const Radius.circular(3),
+        ),
+        paint,
+      );
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromCenter(center: item.$1, width: r * .7, height: r * 2),
+          const Radius.circular(3),
+        ),
+        paint,
+      );
+    }
   }
 
   void _paintGlow(
@@ -120,7 +164,5 @@ class _AuroraPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _AuroraPainter oldDelegate) =>
-      oldDelegate.progress != progress ||
-      oldDelegate.scheme != scheme ||
-      oldDelegate.brightness != brightness;
+      oldDelegate.progress != progress;
 }

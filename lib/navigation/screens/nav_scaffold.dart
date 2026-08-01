@@ -15,7 +15,7 @@ import 'package:clock_app/settings/screens/settings_group_screen.dart';
 import 'package:clock_app/settings/types/setting.dart';
 import 'package:clock_app/system/logic/handle_intents.dart';
 import 'package:clock_app/system/logic/quick_actions.dart';
-import 'package:clock_app/theme/aurora/aurora_background.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -193,7 +193,9 @@ class _NavScaffoldState extends State<NavScaffold> {
         appBar: orientation == Orientation.portrait
             ? AppTopBar(
                 titleWidget: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 280),
+                  duration: MediaQuery.of(context).disableAnimations
+                      ? Duration.zero
+                      : const Duration(milliseconds: 280),
                   transitionBuilder: (child, animation) => FadeTransition(
                     opacity: animation,
                     child: SlideTransition(
@@ -205,11 +207,21 @@ class _NavScaffoldState extends State<NavScaffold> {
                     ),
                   ),
                   child: Text(
-                    tabs[_selectedTabIndex].title,
+                    tabs[_selectedTabIndex].title.toUpperCase(),
                     key: ValueKey(_selectedTabIndex),
-                    style: textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -.4,
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: .8,
+                      shadows: const [
+                        Shadow(
+                          color: DopamineTokens.purple,
+                          offset: Offset(2, 2),
+                        ),
+                        Shadow(
+                          color: DopamineTokens.magenta,
+                          offset: Offset(4, 4),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -217,11 +229,19 @@ class _NavScaffoldState extends State<NavScaffold> {
                 actions: [
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: IconButton.filledTonal(
+                    child: IconButton.filled(
                       tooltip: 'Settings',
                       onPressed: _openSettings,
                       icon: const Icon(FluxIcons.settings,
                           semanticLabel: 'Settings'),
+                      style: IconButton.styleFrom(
+                        backgroundColor: DopamineTokens.yellow,
+                        foregroundColor: DopamineTokens.cosmic,
+                        side: const BorderSide(
+                          color: DopamineTokens.magenta,
+                          width: 3,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -234,45 +254,42 @@ class _NavScaffoldState extends State<NavScaffold> {
               )
             : null,
         extendBody: false,
-        body: AuroraBackground(
-          child: SafeArea(
-            bottom: orientation == Orientation.landscape,
-            child: Row(
-              children: [
-                if (orientation == Orientation.landscape)
-                  NavigationRail(
-                    destinations: [
-                      for (final tab in tabs)
-                        NavigationRailDestination(
-                          icon: Icon(tab.icon),
-                          label: Text(tab.title),
-                        )
-                    ],
-                    leading: Text(tabs[_selectedTabIndex].title,
-                        style: textTheme.headlineSmall?.copyWith(
-                          color: colorScheme.onBackground.withOpacity(0.6),
-                        )),
-                    trailing: IconButton.filledTonal(
-                      onPressed: _openSettings,
-                      icon: const Icon(FluxIcons.settings,
-                          semanticLabel: "Settings"),
-                      color: colorScheme.onBackground.withOpacity(0.8),
-                    ),
-                    selectedIndex: _selectedTabIndex,
-                    onDestinationSelected: _onTabSelected,
+        body: SafeArea(
+          bottom: orientation == Orientation.landscape,
+          child: Row(
+            children: [
+              if (orientation == Orientation.landscape)
+                NavigationRail(
+                  destinations: [
+                    for (final tab in tabs)
+                      NavigationRailDestination(
+                        icon: Icon(tab.icon),
+                        label: Text(tab.title),
+                      )
+                  ],
+                  leading: Text(tabs[_selectedTabIndex].title,
+                      style: textTheme.headlineSmall?.copyWith(
+                        color: colorScheme.onBackground.withOpacity(0.6),
+                      )),
+                  trailing: IconButton.filledTonal(
+                    onPressed: _openSettings,
+                    icon: const Icon(FluxIcons.settings,
+                        semanticLabel: "Settings"),
+                    color: colorScheme.onBackground.withOpacity(0.8),
                   ),
-                Expanded(
-                  child: PageView(
-                      controller: _controller,
-                      onPageChanged: _handlePageViewChanged,
-                      physics:
-                          swipeActionSetting.value == SwipeAction.cardActions
-                              ? const NeverScrollableScrollPhysics()
-                              : null,
-                      children: tabs.map((tab) => tab.widget).toList()),
+                  selectedIndex: _selectedTabIndex,
+                  onDestinationSelected: _onTabSelected,
                 ),
-              ],
-            ),
+              Expanded(
+                child: PageView(
+                    controller: _controller,
+                    onPageChanged: _handlePageViewChanged,
+                    physics: swipeActionSetting.value == SwipeAction.cardActions
+                        ? const NeverScrollableScrollPhysics()
+                        : null,
+                    children: tabs.map((tab) => tab.widget).toList()),
+              ),
+            ],
           ),
         ),
       ),

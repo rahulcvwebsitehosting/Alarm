@@ -15,6 +15,8 @@ import 'package:clock_app/stopwatch/types/lap.dart';
 import 'package:clock_app/stopwatch/types/stopwatch.dart';
 import 'package:clock_app/stopwatch/widgets/lap_card.dart';
 import 'package:clock_app/stopwatch/widgets/stopwatch_ticker.dart';
+import 'package:clock_app/theme/dopamine/dopamine_banner.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -149,7 +151,14 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            StopwatchTicker(stopwatch: _stopwatch),
+            DopamineBanner(
+              eyebrow: _stopwatch.isRunning ? 'In motion' : 'Ready set',
+              title: _stopwatch.isRunning ? 'Chasing time' : 'Own the moment',
+              backgroundWord: 'FAST',
+              icon: Icons.speed_rounded,
+              accent: DopamineTokens.orange,
+              child: StopwatchTicker(stopwatch: _stopwatch),
+            ),
             const SizedBox(height: 8),
             Expanded(
               child: CustomListView<Lap>(
@@ -176,6 +185,8 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
               ? Icons.pause_rounded
               : Icons.play_arrow_rounded,
           size: 2,
+          semanticLabel:
+              _stopwatch.isRunning ? 'Pause stopwatch' : 'Start stopwatch',
         ),
         if (_stopwatch.isStarted)
           FAB(
@@ -183,6 +194,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
             onPressed: _handleAddLap,
             icon: Icons.flag_rounded,
             size: 2,
+            semanticLabel: 'Add lap',
           ),
         if (_stopwatch.isStarted)
           FAB(
@@ -191,6 +203,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
             onPressed: _handleReset,
             icon: Icons.refresh_rounded,
             size: 1,
+            semanticLabel: 'Reset stopwatch',
           ),
       ],
     );

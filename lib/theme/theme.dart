@@ -3,8 +3,8 @@ import 'package:clock_app/theme/card.dart';
 import 'package:clock_app/theme/data/default_style_themes.dart';
 import 'package:clock_app/theme/popup_menu.dart';
 import 'package:clock_app/theme/types/color_scheme.dart';
-import 'package:clock_app/theme/data/default_color_schemes.dart';
 import 'package:clock_app/theme/dialog.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:clock_app/theme/input.dart';
 import 'package:clock_app/theme/radio.dart';
 import 'package:clock_app/theme/slider.dart';
@@ -17,8 +17,8 @@ import 'package:clock_app/theme/types/style_theme.dart';
 import 'package:clock_app/theme/types/theme_extension.dart';
 import 'package:flutter/material.dart';
 
-ColorSchemeData defaultColorScheme = defaultColorSchemes[0];
-ColorSchemeData defaultDarkColorScheme = defaultColorSchemes[2];
+ColorSchemeData defaultColorScheme = DopamineTokens.legacyScheme;
+ColorSchemeData defaultDarkColorScheme = DopamineTokens.legacyScheme;
 StyleTheme defaultStyleTheme = defaultStyleThemes[0];
 
 ThemeData defaultTheme = ThemeData(
@@ -28,10 +28,11 @@ ThemeData defaultTheme = ThemeData(
     displayColor: defaultColorScheme.onBackground,
   ),
   cardTheme: cardTheme,
-  colorScheme: getColorScheme(defaultColorScheme),
+  colorScheme: DopamineTokens.colorScheme,
+  scaffoldBackgroundColor: Colors.transparent,
   timePickerTheme: timePickerTheme,
   dialogTheme: dialogTheme,
-  splashColor: defaultColorScheme.background,
+  splashColor: DopamineTokens.cyan.withOpacity(.18),
   switchTheme: getSwitchTheme(defaultColorScheme),
   snackBarTheme: getSnackBarTheme(defaultColorScheme, defaultStyleTheme),
   inputDecorationTheme: getInputTheme(defaultColorScheme, defaultStyleTheme),
@@ -39,6 +40,9 @@ ThemeData defaultTheme = ThemeData(
   sliderTheme: getSliderTheme(defaultColorScheme),
   bottomSheetTheme: getBottomSheetTheme(defaultColorScheme, defaultStyleTheme),
   toggleButtonsTheme: toggleButtonsTheme,
-  extensions: const <ThemeExtension<dynamic>>[ThemeStyleExtension(), ThemeSettingExtension()],
+  extensions: const <ThemeExtension<dynamic>>[
+    ThemeStyleExtension(),
+    ThemeSettingExtension()
+  ],
   popupMenuTheme: getPopupMenuTheme(defaultColorScheme, defaultStyleTheme),
 );

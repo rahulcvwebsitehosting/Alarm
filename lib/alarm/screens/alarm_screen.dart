@@ -21,6 +21,7 @@ import 'package:clock_app/navigation/types/quick_action_controller.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
 import 'package:clock_app/theme/aurora/aurora_surface.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:clock_app/voice/voice_agent_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -335,11 +336,13 @@ class _AlarmScreenState extends State<AlarmScreen> {
         ),
         FAB(
           onPressed: handleAddAlarmActon,
+          semanticLabel: 'Add alarm',
         ),
         FAB(
           onPressed: _openVoiceAgent,
           index: 1,
           icon: Icons.mic_rounded,
+          semanticLabel: 'Create alarm with voice',
         ),
         if (_showInstantAlarmButton.value)
           FAB(
@@ -349,6 +352,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
             },
             index: 2,
             icon: Icons.alarm,
+            semanticLabel: 'Create instant alarm',
           )
       ],
     );
@@ -364,7 +368,6 @@ class _AlarmHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
     final schedule = nextAlarm?.currentScheduleDateTime;
     final time = schedule == null
         ? '--:--'
@@ -375,74 +378,129 @@ class _AlarmHero extends StatelessWidget {
         ? 'Say it naturally. Your phone understands.'
         : MaterialLocalizations.of(context).formatMediumDate(schedule);
 
-    return AuroraSurface(
-      margin: const EdgeInsets.fromLTRB(16, 6, 16, 12),
-      padding: const EdgeInsets.all(20),
+    final hero = AuroraSurface(
+      margin: const EdgeInsets.fromLTRB(18, 10, 24, 18),
+      padding: const EdgeInsets.all(22),
       emphasized: true,
-      child: Row(
+      accent: DopamineTokens.magenta,
+      rotation: -.008,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  schedule == null ? 'READY WHEN YOU ARE' : 'NEXT ALARM',
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: scheme.primary,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.3,
-                  ),
+          Positioned(
+            right: -18,
+            top: -28,
+            child: ExcludeSemantics(
+              child: Text(
+                'WAKE',
+                style: theme.textTheme.displayLarge?.copyWith(
+                  color: DopamineTokens.purple.withOpacity(.24),
+                  fontSize: 82,
+                  fontWeight: FontWeight.w900,
                 ),
-                const SizedBox(height: 5),
-                Text(
-                  time,
-                  style: theme.textTheme.displayMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -1.8,
-                    height: 1,
-                  ),
-                ),
-                const SizedBox(height: 7),
-                Text(
-                  date,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Semantics(
-            button: true,
-            label: 'Create alarm with voice',
-            child: InkWell(
-              borderRadius: BorderRadius.circular(22),
-              onTap: onVoice,
-              child: Ink(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: [scheme.primary, scheme.tertiary],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: scheme.primary.withOpacity(.35),
-                      blurRadius: 24,
-                    ),
-                  ],
-                ),
-                child:
-                    Icon(Icons.mic_rounded, color: scheme.onPrimary, size: 30),
               ),
             ),
           ),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: DopamineTokens.yellow,
+                        borderRadius: BorderRadius.circular(
+                          DopamineTokens.radiusPill,
+                        ),
+                        border: Border.all(
+                          color: DopamineTokens.cyan,
+                          width: 2,
+                        ),
+                      ),
+                      child: Text(
+                        schedule == null ? 'READY TO GO' : 'NEXT UP',
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: DopamineTokens.cosmic,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      time,
+                      style: theme.textTheme.displayMedium?.copyWith(
+                        color: DopamineTokens.white,
+                        fontSize: 52,
+                        fontWeight: FontWeight.w900,
+                        shadows: const [
+                          Shadow(
+                            color: DopamineTokens.purple,
+                            offset: Offset(2, 2),
+                          ),
+                          Shadow(
+                            color: DopamineTokens.magenta,
+                            offset: Offset(4, 4),
+                          ),
+                          Shadow(
+                            color: DopamineTokens.cyan,
+                            offset: Offset(6, 6),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      date,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: DopamineTokens.white.withOpacity(.86),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 14),
+              Semantics(
+                button: true,
+                label: 'Create alarm with voice',
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(26),
+                  onTap: onVoice,
+                  child: Ink(
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      color: DopamineTokens.cyan,
+                      borderRadius: BorderRadius.circular(26),
+                      border: Border.all(
+                        color: DopamineTokens.orange,
+                        width: 4,
+                      ),
+                      boxShadow: DopamineTokens.stackedShadow(
+                        DopamineTokens.cyan,
+                        emphasized: true,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.mic_rounded,
+                      color: DopamineTokens.cosmic,
+                      size: 34,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
-    ).animate().fadeIn(duration: 420.ms).slideY(begin: .08, end: 0);
+    );
+    if (MediaQuery.of(context).disableAnimations) return hero;
+    return hero.animate().fadeIn(duration: 320.ms).slideY(begin: .05, end: 0);
   }
 }

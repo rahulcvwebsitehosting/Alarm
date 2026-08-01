@@ -39,6 +39,7 @@ class CardContainer extends StatelessWidget {
     this.showLightBorder = false,
     this.blurStyle = BlurStyle.normal,
     this.onLongPress,
+    this.accent,
   });
 
   final Widget child;
@@ -52,6 +53,7 @@ class CardContainer extends StatelessWidget {
   final BlurStyle blurStyle;
   final bool showLightBorder;
   final bool isSelected;
+  final Color? accent;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,7 @@ class CardContainer extends StatelessWidget {
     return Container(
       // duration: const Duration(milliseconds: 100),
       alignment: alignment,
-      margin: margin ?? const EdgeInsets.all(4),
+      margin: margin ?? const EdgeInsets.fromLTRB(6, 6, 14, 14),
       clipBehavior: Clip.antiAlias,
       decoration: getCardDecoration(
         context,
@@ -71,6 +73,7 @@ class CardContainer extends StatelessWidget {
         showShadow: showShadow,
         elevationMultiplier: elevationMultiplier,
         blurStyle: blurStyle,
+        accent: accent,
       ),
       child: onTap == null
           ? child

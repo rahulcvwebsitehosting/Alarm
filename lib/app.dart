@@ -14,6 +14,7 @@ import 'package:clock_app/settings/types/setting_group.dart';
 import 'package:clock_app/system/data/app_info.dart';
 import 'package:clock_app/system/logic/background_service.dart';
 import 'package:clock_app/theme/types/color_scheme.dart';
+import 'package:clock_app/theme/aurora/aurora_background.dart';
 import 'package:clock_app/theme/theme.dart';
 import 'package:clock_app/theme/types/style_theme.dart';
 import 'package:clock_app/theme/types/theme_brightness.dart';
@@ -203,6 +204,9 @@ class _AppState extends State<App> {
         locale: locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        builder: (context, child) => AuroraBackground(
+          child: child ?? const SizedBox.shrink(),
+        ),
         onGenerateRoute: (settings) {
           Routes.push(settings.name ?? Routes.rootRoute);
           switch (settings.name) {

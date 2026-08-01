@@ -1,5 +1,4 @@
-import 'package:clock_app/developer/logic/logger.dart';
-import 'package:clock_app/settings/data/settings_schema.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,7 +9,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? systemNavBarColor;
 
   @override
-  Size get preferredSize => const Size(0, 56);
+  Size get preferredSize => const Size(0, 64);
 
   const AppTopBar({
     super.key,
@@ -45,7 +44,13 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
             ? Text(
                 title!,
                 style: textTheme.titleMedium?.copyWith(
-                  color: colorScheme.onBackground.withOpacity(0.6),
+                  color: DopamineTokens.white,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: .6,
+                  shadows: const [
+                    Shadow(color: DopamineTokens.purple, offset: Offset(2, 2)),
+                    Shadow(color: DopamineTokens.magenta, offset: Offset(4, 4)),
+                  ],
                 ),
               )
             : null);
@@ -55,46 +60,56 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
 
     return PreferredSize(
       preferredSize: preferredSize,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle(
-            systemNavigationBarColor: systemNavigationBarColor,
-            systemNavigationBarDividerColor: Colors.transparent,
-            systemNavigationBarIconBrightness: systemNavBarIconBrightness,
-            statusBarColor: colorScheme.background,
-            statusBarIconBrightness:
-                statusBarIconBrightness, // For Android (dark icons)
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: DopamineTokens.cosmic.withOpacity(.96),
+          border: const Border(
+            bottom: BorderSide(color: DopamineTokens.magenta, width: 3),
           ),
-          scrolledUnderElevation: 0,
-          toolbarHeight: preferredSize.height,
-          titleSpacing: 0,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (showBackButton) ...[
-                IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: colorScheme.onSurface.withOpacity(0.8)),
-                    onPressed: () => Navigator.of(context).pop(),
-                    padding: EdgeInsets.zero),
-                const SizedBox(width: 8)
+          boxShadow: const [
+            BoxShadow(color: DopamineTokens.cyan, offset: Offset(0, 5)),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: AppBar(
+            systemOverlayStyle: SystemUiOverlayStyle(
+              systemNavigationBarColor: systemNavigationBarColor,
+              systemNavigationBarDividerColor: Colors.transparent,
+              systemNavigationBarIconBrightness: systemNavBarIconBrightness,
+              statusBarColor: colorScheme.background,
+              statusBarIconBrightness:
+                  statusBarIconBrightness, // For Android (dark icons)
+            ),
+            scrolledUnderElevation: 0,
+            toolbarHeight: preferredSize.height,
+            titleSpacing: 0,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (showBackButton) ...[
+                  IconButton(
+                      icon: Icon(Icons.arrow_back, color: DopamineTokens.cyan),
+                      onPressed: () => Navigator.of(context).pop(),
+                      padding: EdgeInsets.zero),
+                  const SizedBox(width: 8)
+                ],
+                if (!showBackButton) const SizedBox(width: 16),
+                if (barTitleWidget != null) barTitleWidget,
               ],
-              if (!showBackButton) const SizedBox(width: 16),
-              if (barTitleWidget != null) barTitleWidget,
-            ],
+            ),
+            actions: [...?actions],
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            iconTheme: IconThemeData(
+              color: DopamineTokens.cyan,
+            ),
+            titleTextStyle: textTheme.titleMedium?.copyWith(
+              color: colorScheme.onSurface,
+            ),
+            backgroundColor: Colors.transparent,
           ),
-          actions: [...?actions],
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          iconTheme: IconThemeData(
-            color: colorScheme.onSurface.withOpacity(0.8),
-          ),
-          titleTextStyle: textTheme.titleMedium?.copyWith(
-            color: colorScheme.onSurface,
-          ),
-          backgroundColor: Colors.transparent,
         ),
       ),
     );

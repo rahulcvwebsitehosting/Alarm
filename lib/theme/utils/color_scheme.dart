@@ -1,6 +1,7 @@
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting_group.dart';
 import 'package:clock_app/theme/bottom_sheet.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:clock_app/theme/popup_menu.dart';
 import 'package:clock_app/theme/slider.dart';
 import 'package:clock_app/theme/switch.dart';
@@ -55,23 +56,30 @@ ThemeData getTheme(
   if (styleTheme == null || colorSchemeData == null) {
     return defaultTheme;
   }
-  RoundedRectangleBorder shape = RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(styleTheme.borderRadius),
+  final resolvedScheme = DopamineTokens.colorScheme;
+  final resolvedData = DopamineTokens.legacyScheme;
+  final dopamineShape = RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(DopamineTokens.radiusLg),
+    side: const BorderSide(color: DopamineTokens.magenta, width: 3),
   );
-
-  final resolvedScheme = colorScheme ?? getColorScheme(colorSchemeData);
 
   return defaultTheme.copyWith(
     colorScheme: resolvedScheme,
-    scaffoldBackgroundColor: colorSchemeData.background,
-    cardColor: colorSchemeData.card,
-    radioTheme: getRadioTheme(colorSchemeData),
-    dialogBackgroundColor: colorSchemeData.card,
-    bottomSheetTheme: getBottomSheetTheme(colorSchemeData, styleTheme),
+    brightness: Brightness.dark,
+    scaffoldBackgroundColor: Colors.transparent,
+    canvasColor: DopamineTokens.cosmic,
+    cardColor: DopamineTokens.surface,
+    radioTheme: getRadioTheme(resolvedData),
+    dialogBackgroundColor: DopamineTokens.surfaceStrong,
+    bottomSheetTheme: getBottomSheetTheme(resolvedData, styleTheme).copyWith(
+      backgroundColor: DopamineTokens.surfaceStrong,
+      modalBackgroundColor: DopamineTokens.surfaceStrong,
+      shape: dopamineShape,
+    ),
     textTheme: defaultTheme.textTheme
         .apply(
-          bodyColor: colorSchemeData.onBackground,
-          displayColor: colorSchemeData.onBackground,
+          bodyColor: DopamineTokens.white,
+          displayColor: DopamineTokens.white,
         )
         .copyWith(
           headlineSmall: defaultTheme.textTheme.headlineSmall?.copyWith(
@@ -83,51 +91,106 @@ ThemeData getTheme(
             letterSpacing: -.2,
           ),
         ),
-    splashColor: colorSchemeData.background,
-    snackBarTheme: getSnackBarTheme(colorSchemeData, styleTheme),
-    inputDecorationTheme: getInputTheme(colorSchemeData, styleTheme),
-    popupMenuTheme: getPopupMenuTheme(colorSchemeData, styleTheme),
-    switchTheme: getSwitchTheme(colorSchemeData),
-    sliderTheme: getSliderTheme(colorSchemeData),
-    cardTheme: defaultTheme.cardTheme.copyWith(shape: shape),
+    splashColor: DopamineTokens.cyan.withOpacity(.20),
+    highlightColor: DopamineTokens.yellow.withOpacity(.10),
+    dividerColor: DopamineTokens.cyan.withOpacity(.34),
+    snackBarTheme: getSnackBarTheme(resolvedData, styleTheme),
+    inputDecorationTheme: getInputTheme(resolvedData, styleTheme).copyWith(
+      filled: true,
+      fillColor: DopamineTokens.surfaceStrong.withOpacity(.86),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(DopamineTokens.radiusMd),
+        borderSide: const BorderSide(color: DopamineTokens.magenta, width: 3),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(DopamineTokens.radiusMd),
+        borderSide: const BorderSide(color: DopamineTokens.cyan, width: 4),
+      ),
+    ),
+    popupMenuTheme: getPopupMenuTheme(resolvedData, styleTheme).copyWith(
+      color: DopamineTokens.surfaceStrong,
+      surfaceTintColor: Colors.transparent,
+      shape: dopamineShape,
+    ),
+    switchTheme: getSwitchTheme(resolvedData),
+    sliderTheme: getSliderTheme(resolvedData),
+    cardTheme: defaultTheme.cardTheme.copyWith(shape: dopamineShape),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         minimumSize: const Size(48, 54),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(DopamineTokens.radiusPill),
         ),
-        textStyle: const TextStyle(fontWeight: FontWeight.w700),
+        backgroundColor: DopamineTokens.magenta,
+        foregroundColor: DopamineTokens.cosmic,
+        side: const BorderSide(color: DopamineTokens.yellow, width: 3),
+        textStyle: const TextStyle(
+          fontWeight: FontWeight.w900,
+          letterSpacing: 1.1,
+        ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         minimumSize: const Size(48, 54),
-        side: BorderSide(color: resolvedScheme.outlineVariant),
+        side: const BorderSide(color: DopamineTokens.cyan, width: 3),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(DopamineTokens.radiusPill),
         ),
-        textStyle: const TextStyle(fontWeight: FontWeight.w600),
+        foregroundColor: DopamineTokens.white,
+        textStyle: const TextStyle(
+          fontWeight: FontWeight.w800,
+          letterSpacing: .8,
+        ),
       ),
     ),
     iconButtonTheme: IconButtonThemeData(
-      style: IconButton.styleFrom(minimumSize: const Size(48, 48)),
+      style: IconButton.styleFrom(
+        minimumSize: const Size(48, 48),
+        foregroundColor: DopamineTokens.cyan,
+      ),
+    ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: DopamineTokens.cyan,
+      linearTrackColor: DopamineTokens.surfaceStrong,
+      circularTrackColor: DopamineTokens.surfaceStrong,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: DopamineTokens.cosmic,
+      foregroundColor: DopamineTokens.white,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+    ),
+    navigationRailTheme: const NavigationRailThemeData(
+      backgroundColor: DopamineTokens.surface,
+      indicatorColor: DopamineTokens.yellow,
+      selectedIconTheme: IconThemeData(color: DopamineTokens.cosmic),
+      unselectedIconTheme: IconThemeData(color: DopamineTokens.cyan),
+      selectedLabelTextStyle: TextStyle(
+        color: DopamineTokens.white,
+        fontWeight: FontWeight.w800,
+      ),
     ),
     timePickerTheme: defaultTheme.timePickerTheme.copyWith(
-      shape: shape,
-      dayPeriodShape: shape,
-      hourMinuteShape: shape,
+      shape: dopamineShape,
+      dayPeriodShape: dopamineShape,
+      hourMinuteShape: dopamineShape,
     ),
     toggleButtonsTheme: defaultTheme.toggleButtonsTheme.copyWith(
-      borderRadius: BorderRadius.circular(styleTheme.borderRadius),
+      borderRadius: BorderRadius.circular(DopamineTokens.radiusPill),
+      borderColor: DopamineTokens.cyan,
+      selectedBorderColor: DopamineTokens.yellow,
+      selectedColor: DopamineTokens.cosmic,
+      fillColor: DopamineTokens.yellow,
     ),
     extensions: [
       defaultTheme.extension<ThemeStyleExtension>()?.copyWith(
-                borderRadius: styleTheme.borderRadius,
-                shadowElevation: styleTheme.shadowElevation,
-                shadowBlurRadius: styleTheme.shadowBlurRadius,
-                shadowOpacity: styleTheme.shadowOpacity,
-                shadowSpreadRadius: styleTheme.shadowSpreadRadius,
-                borderWidth: styleTheme.borderWidth,
+                borderRadius: DopamineTokens.radiusLg,
+                shadowElevation: 8,
+                shadowBlurRadius: 18,
+                shadowOpacity: .38,
+                shadowSpreadRadius: 0,
+                borderWidth: 3,
               ) ??
           const ThemeStyleExtension(),
       defaultTheme.extension<ThemeSettingExtension>()?.copyWith(

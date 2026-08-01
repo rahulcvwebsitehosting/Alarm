@@ -27,6 +27,8 @@ import 'package:clock_app/common/widgets/fab.dart';
 import 'package:clock_app/common/widgets/list/persistent_list_view.dart';
 import 'package:clock_app/timer/types/timer.dart';
 import 'package:clock_app/timer/widgets/timer_card.dart';
+import 'package:clock_app/theme/dopamine/dopamine_banner.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Future<bool> updateForegroundTask(List<ClockTimer> timers) async {
@@ -107,7 +109,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //     // _sendPort?.send('onNotificationPressed');
 //   }
 // }
-
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key, this.actionController});
@@ -410,12 +411,21 @@ class _TimerScreenState extends State<TimerScreen> {
               listFilters: _showFilters.value ? timerListFilters : [],
               sortOptions: _showSort.value ? timerSortOptions : [],
               customActions: _getCustomActions(),
+              header: const DopamineBanner(
+                eyebrow: 'Make it count',
+                title: 'Beat the clock',
+                subtitle: 'Stack timers, stay loud, finish strong.',
+                backgroundWord: 'GO',
+                icon: Icons.bolt_rounded,
+                accent: DopamineTokens.yellow,
+              ),
             ),
           ),
         ],
       ),
       FAB(
         onPressed: handleAddTimerAction,
+        semanticLabel: 'Add timer',
       )
     ]);
   }

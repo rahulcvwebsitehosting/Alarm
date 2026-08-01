@@ -3,27 +3,34 @@ import 'package:flutter/material.dart';
 
 TextTheme textTheme = const TextTheme(
   titleLarge: TextStyle(
-    fontSize: 32,
-    fontVariations: FontVariations.semiBold,
+    fontSize: 34,
+    height: 1.05,
+    letterSpacing: -1.2,
+    fontVariations: FontVariations.extraBold,
   ),
   titleMedium: TextStyle(
-    fontSize: 20,
-    fontVariations: FontVariations.semiBold,
+    fontSize: 22,
+    height: 1.15,
+    fontVariations: FontVariations.bold,
   ),
   titleSmall: TextStyle(
-    fontSize: 12,
-    fontVariations: FontVariations.semiBold,
+    fontSize: 15,
+    fontVariations: FontVariations.bold,
   ),
   displayLarge: TextStyle(
-    fontSize: 60,
-    fontVariations: FontVariations.bold,
+    fontSize: 68,
+    height: .92,
+    letterSpacing: -3,
+    fontVariations: FontVariations.extraBold,
   ),
   displayMedium: TextStyle(
-    fontSize: 28,
-    fontVariations: FontVariations.bold,
+    fontSize: 44,
+    height: .95,
+    letterSpacing: -2,
+    fontVariations: FontVariations.extraBold,
   ),
   displaySmall: TextStyle(
-    fontSize: 16,
+    fontSize: 18,
     fontVariations: FontVariations.bold,
   ),
   bodyLarge: TextStyle(
@@ -31,16 +38,19 @@ TextTheme textTheme = const TextTheme(
     fontVariations: FontVariations.regular,
   ),
   bodyMedium: TextStyle(
-    fontSize: 12,
+    fontSize: 14,
+    height: 1.5,
     fontVariations: FontVariations.regular,
   ),
   bodySmall: TextStyle(
-    fontSize: 10,
+    fontSize: 12,
+    height: 1.45,
     fontVariations: FontVariations.regular,
   ),
   labelLarge: TextStyle(
-    fontSize: 18,
-    fontVariations: FontVariations.medium,
+    fontSize: 16,
+    letterSpacing: .8,
+    fontVariations: FontVariations.bold,
   ),
   labelMedium: TextStyle(
     fontSize: 14,
@@ -48,18 +58,23 @@ TextTheme textTheme = const TextTheme(
   ),
   labelSmall: TextStyle(
     fontSize: 12,
-    fontVariations: FontVariations.medium,
+    letterSpacing: .7,
+    fontVariations: FontVariations.bold,
   ),
   headlineLarge: TextStyle(
-    fontSize: 28,
-    fontVariations: FontVariations.semiBold,
+    fontSize: 38,
+    height: 1,
+    letterSpacing: -1.5,
+    fontVariations: FontVariations.extraBold,
   ),
   headlineMedium: TextStyle(
-    fontSize: 16,
-    fontVariations: FontVariations.semiBold,
+    fontSize: 26,
+    height: 1.1,
+    fontVariations: FontVariations.bold,
   ),
   headlineSmall: TextStyle(
-    fontSize: 12,
-    fontVariations: FontVariations.semiBold,
+    fontSize: 18,
+    height: 1.2,
+    fontVariations: FontVariations.bold,
   ),
 );

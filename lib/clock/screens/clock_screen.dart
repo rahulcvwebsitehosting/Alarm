@@ -9,6 +9,8 @@ import 'package:clock_app/navigation/types/alignment.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
 import 'package:clock_app/settings/types/setting_group.dart';
+import 'package:clock_app/theme/dopamine/dopamine_banner.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 
 class ClockScreen extends StatefulWidget {
@@ -78,8 +80,12 @@ class _ClockScreenState extends State<ClockScreen> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Column(children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        DopamineBanner(
+          eyebrow: 'Live worldwide',
+          title: 'World beat',
+          backgroundWord: 'NOW',
+          icon: Icons.public_rounded,
+          accent: DopamineTokens.cyan,
           child: clockTypeSetting.value == ClockType.analog
               ? AnalogClock(
                   showDigitalClock: showDigitalClockSetting.value,
@@ -114,6 +120,7 @@ class _ClockScreenState extends State<ClockScreen> {
             MaterialPageRoute(builder: (context) => const SearchCityScreen()),
           ).then(_handleSearchReturn);
         },
+        semanticLabel: 'Add city',
       )
     ]);
   }

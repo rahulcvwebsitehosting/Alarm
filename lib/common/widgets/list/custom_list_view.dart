@@ -10,6 +10,7 @@ import 'package:clock_app/common/widgets/list/list_item_card.dart';
 import 'package:clock_app/settings/data/general_settings_schema.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -337,7 +338,6 @@ class _CustomListViewState<Item extends ListItem>
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    ColorScheme colorScheme = theme.colorScheme;
     TextTheme textTheme = theme.textTheme;
 
     if (_selectedSortIndex > widget.sortOptions.length) {
@@ -371,10 +371,51 @@ class _CustomListViewState<Item extends ListItem>
                     height: double.infinity,
                     width: double.infinity,
                     child: Center(
-                      child: Text(
-                        widget.placeholderText,
-                        style: textTheme.displaySmall?.copyWith(
-                          color: colorScheme.onBackground.withOpacity(0.6),
+                      child: Container(
+                        constraints: const BoxConstraints(maxWidth: 300),
+                        margin: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: DopamineTokens.surfaceStrong.withOpacity(.92),
+                          borderRadius: BorderRadius.circular(28),
+                          border: Border.all(
+                            color: DopamineTokens.magenta,
+                            width: 3,
+                          ),
+                          boxShadow: DopamineTokens.stackedShadow(
+                            DopamineTokens.magenta,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 58,
+                              height: 58,
+                              decoration: BoxDecoration(
+                                color: DopamineTokens.yellow,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: DopamineTokens.cyan,
+                                  width: 3,
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.add_rounded,
+                                color: DopamineTokens.cosmic,
+                                size: 32,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              widget.placeholderText,
+                              textAlign: TextAlign.center,
+                              style: textTheme.displaySmall?.copyWith(
+                                color: DopamineTokens.white,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -387,8 +428,7 @@ class _CustomListViewState<Item extends ListItem>
                 proxyDecorator: (widget, index, animation) =>
                     reorderableListDecorator(context, widget),
                 items: currentList,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 112),
                 isSameItem: (a, b) => a.id == b.id,
                 scrollDirection: Axis.vertical,
                 itemBuilder: _getItemBuilder(),

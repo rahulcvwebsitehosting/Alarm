@@ -2,6 +2,7 @@ import 'package:clock_app/icons/flux_icons.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
 import 'package:clock_app/theme/types/theme_extension.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 
 enum FabPosition { bottomLeft, bottomRight }
@@ -15,6 +16,7 @@ class FAB extends StatefulWidget {
     this.bottomPadding = 0,
     this.size = 1,
     this.position = FabPosition.bottomRight,
+    this.semanticLabel = 'Add',
   });
 
   final VoidCallback? onPressed;
@@ -23,6 +25,7 @@ class FAB extends StatefulWidget {
   final double bottomPadding;
   final double size;
   final FabPosition position;
+  final String semanticLabel;
 
   @override
   State<FAB> createState() => _FABState();
@@ -53,9 +56,10 @@ class _FABState extends State<FAB> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    ColorScheme colorScheme = theme.colorScheme;
     ThemeSettingExtension themeSettings =
         theme.extension<ThemeSettingExtension>()!;
+    final accent = DopamineTokens.accentFor(widget.index);
+    final clash = DopamineTokens.clashFor(accent);
 
     final position = _leftHandedMode.value
         ? widget.position == FabPosition.bottomRight
@@ -77,35 +81,24 @@ class _FABState extends State<FAB> {
           : null,
       child: Semantics(
         button: true,
+        label: widget.semanticLabel,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(22),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [colorScheme.primary, colorScheme.tertiary],
-            ),
-            border: Border.all(
-              color: colorScheme.onPrimary.withOpacity(.18),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: colorScheme.primary.withOpacity(.32),
-                blurRadius: 24,
-                offset: const Offset(0, 10),
-              ),
-            ],
+            borderRadius: BorderRadius.circular(DopamineTokens.radiusMd),
+            color: accent,
+            border: Border.all(color: clash, width: 3),
+            boxShadow: DopamineTokens.stackedShadow(accent, emphasized: true),
           ),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(DopamineTokens.radiusMd),
               onTap: widget.onPressed,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Icon(
                   widget.icon,
-                  color: colorScheme.onPrimary,
+                  color: DopamineTokens.inkFor(accent),
                   size: 24 * widget.size,
                 ),
               ),

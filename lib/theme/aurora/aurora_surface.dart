@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 
 class AuroraSurface extends StatelessWidget {
@@ -11,6 +12,8 @@ class AuroraSurface extends StatelessWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(24)),
     this.onTap,
     this.emphasized = false,
+    this.accent,
+    this.rotation = 0,
   });
 
   final Widget child;
@@ -19,60 +22,61 @@ class AuroraSurface extends StatelessWidget {
   final BorderRadius borderRadius;
   final VoidCallback? onTap;
   final bool emphasized;
+  final Color? accent;
+  final double rotation;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final dark = Theme.of(context).brightness == Brightness.dark;
-    final surfaceOpacity = dark ? .66 : .72;
-    final content = Container(
-      padding: padding,
-      decoration: BoxDecoration(
+    final resolvedAccent = accent ?? DopamineTokens.magenta;
+    final resolvedClash = DopamineTokens.clashFor(resolvedAccent);
+    final content = Material(
+      color: Colors.transparent,
+      child: InkWell(
         borderRadius: borderRadius,
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: emphasized
-              ? [
-                  scheme.primary.withOpacity(dark ? .34 : .22),
-                  scheme.tertiary.withOpacity(dark ? .20 : .12),
-                ]
-              : [
-                  scheme.surface.withOpacity(surfaceOpacity),
-                  scheme.surfaceVariant.withOpacity(surfaceOpacity * .72),
-                ],
-        ),
-        border: Border.all(
-          color: (emphasized ? scheme.primary : scheme.outlineVariant)
-              .withOpacity(dark ? .34 : .42),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: scheme.shadow.withOpacity(dark ? .24 : .10),
-            blurRadius: emphasized ? 30 : 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        onTap: onTap,
+        child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
       ),
-      child: child,
     );
 
     return Padding(
       padding: margin ?? EdgeInsets.zero,
-      child: ClipRRect(
-        borderRadius: borderRadius,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
-          child: onTap == null
-              ? content
-              : Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: borderRadius,
-                    onTap: onTap,
-                    child: content,
+      child: Transform.rotate(
+        angle: rotation,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            boxShadow: DopamineTokens.stackedShadow(
+              resolvedAccent,
+              emphasized: emphasized,
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: borderRadius,
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: borderRadius,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.alphaBlend(
+                        resolvedAccent.withOpacity(emphasized ? .25 : .10),
+                        DopamineTokens.surfaceStrong.withOpacity(.94),
+                      ),
+                      DopamineTokens.surface.withOpacity(.92),
+                    ],
+                  ),
+                  border: Border.all(
+                    color: emphasized ? resolvedClash : resolvedAccent,
+                    width: emphasized ? 4 : 3,
                   ),
                 ),
+                child: content,
+              ),
+            ),
+          ),
         ),
       ),
     );

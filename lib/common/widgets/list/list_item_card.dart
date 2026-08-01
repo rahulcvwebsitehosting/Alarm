@@ -4,6 +4,7 @@ import 'package:clock_app/common/widgets/list/animated_reorderable_list/componen
 import 'package:clock_app/settings/data/general_settings_schema.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -94,6 +95,7 @@ class _ListItemCardState<T> extends State<ListItemCard<T>> {
     return SizedBox(
       width: double.infinity,
       child: CardContainer(
+        accent: DopamineTokens.accentFor(widget.index),
         onTap: widget.onTap,
         onLongPress: widget.onLongPress,
         isSelected: widget.isSelected,
@@ -106,7 +108,6 @@ class _ListItemCardState<T> extends State<ListItemCard<T>> {
               // decoration: const BoxDecoration(),
               clipBehavior: Clip.hardEdge,
               child: ReorderableGridDragStartListener(
-
                 key: widget.key,
                 index: widget.index,
                 enabled: true,

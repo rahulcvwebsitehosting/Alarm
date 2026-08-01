@@ -10,6 +10,7 @@ import 'package:clock_app/common/widgets/card_edit_menu.dart';
 import 'package:clock_app/common/widgets/clock/digital_clock_display.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -142,7 +143,7 @@ class _AlarmCardState extends State<AlarmCard> {
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 280),
-            width: 5,
+            width: 7,
             height: 72,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
@@ -150,7 +151,11 @@ class _AlarmCardState extends State<AlarmCard> {
                   ? LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [colorScheme.primary, colorScheme.tertiary],
+                      colors: [
+                        DopamineTokens.magenta,
+                        DopamineTokens.cyan,
+                        DopamineTokens.yellow,
+                      ],
                     )
                   : null,
               color: widget.alarm.isEnabled ? null : colorScheme.outlineVariant,
@@ -168,8 +173,10 @@ class _AlarmCardState extends State<AlarmCard> {
                     Text(
                       widget.alarm.label,
                       style: textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: .3,
                         color: widget.alarm.isEnabled
-                            ? colorScheme.onBackground.withOpacity(0.8)
+                            ? DopamineTokens.white
                             : colorScheme.onBackground.withOpacity(0.6),
                       ),
                       maxLines: 1,
@@ -191,7 +198,7 @@ class _AlarmCardState extends State<AlarmCard> {
                       Icon(
                         timeOfDayIcon.icon,
                         color: widget.alarm.isEnabled
-                            ? timeOfDayIcon.color
+                            ? DopamineTokens.orange
                             : colorScheme.onBackground.withOpacity(0.6),
                         size: 24,
                       ),

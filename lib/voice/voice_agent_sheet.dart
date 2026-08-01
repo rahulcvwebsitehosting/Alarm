@@ -2,6 +2,7 @@ import 'package:clock_app/voice/alarm_mapper.dart';
 import 'package:clock_app/voice/local_alarm_parser.dart';
 import 'package:clock_app/voice/parsed_alarm.dart';
 import 'package:clock_app/theme/aurora/aurora_surface.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
@@ -168,6 +169,8 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
       top: false,
       child: AuroraSurface(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+        accent: DopamineTokens.cyan,
+        emphasized: true,
         padding: EdgeInsets.fromLTRB(
           24,
           14,
@@ -178,15 +181,38 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Container(
-                width: 44,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.outlineVariant,
-                  borderRadius: BorderRadius.circular(3),
+            Row(
+              children: [
+                const Spacer(),
+                Container(
+                  width: 52,
+                  height: 7,
+                  decoration: BoxDecoration(
+                    color: DopamineTokens.magenta,
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: DopamineTokens.yellow,
+                        offset: Offset(3, 3),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                const Spacer(),
+                IconButton(
+                  tooltip: 'Close voice agent',
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close_rounded),
+                  style: IconButton.styleFrom(
+                    foregroundColor: DopamineTokens.cosmic,
+                    backgroundColor: DopamineTokens.yellow,
+                    side: const BorderSide(
+                      color: DopamineTokens.magenta,
+                      width: 3,
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 24),
             _VoiceOrb(listening: isListening, processing: isProcessing),
@@ -198,26 +224,43 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
                 key: ValueKey(_state),
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -.4,
+                  color: DopamineTokens.white,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -.7,
+                  shadows: const [
+                    Shadow(color: DopamineTokens.purple, offset: Offset(2, 2)),
+                    Shadow(color: DopamineTokens.magenta, offset: Offset(4, 4)),
+                  ],
                 ),
               ),
             ),
             const SizedBox(height: 12),
             if (_transcript.isNotEmpty)
-              Text(
-                '"$_transcript"',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  height: 1.4,
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: DopamineTokens.surface,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: DopamineTokens.orange, width: 3),
+                ),
+                child: Text(
+                  '“$_transcript”',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: DopamineTokens.white,
+                    height: 1.4,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ).animate().fadeIn(),
             if (isListening && _transcript.isEmpty)
               Text(
                 'Try "Remind me every day at 7 AM to cook soya and eggs."',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                style: TextStyle(
+                  color: DopamineTokens.white.withOpacity(.76),
+                ),
               ),
             if (isProcessing) ...[
               const SizedBox(height: 24),
@@ -249,7 +292,10 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
               Text(
                 _errorMessage,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: theme.colorScheme.error),
+                style: const TextStyle(
+                  color: DopamineTokens.danger,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
@@ -288,30 +334,24 @@ class _VoiceOrb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final reduceMotion = MediaQuery.of(context).disableAnimations;
+    final accent = processing ? DopamineTokens.yellow : DopamineTokens.magenta;
     Widget orb = Center(
       child: Container(
         width: 88,
         height: 88,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [scheme.primary, scheme.tertiary],
+          color: accent,
+          border: Border.all(
+            color: DopamineTokens.clashFor(accent),
+            width: 4,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: scheme.primary.withOpacity(.38),
-              blurRadius: 34,
-              spreadRadius: 2,
-            ),
-          ],
+          boxShadow: DopamineTokens.stackedShadow(accent, emphasized: true),
         ),
         child: Icon(
-          processing ? Icons.auto_awesome_rounded : Icons.mic_rounded,
-          color: scheme.onPrimary,
+          processing ? Icons.graphic_eq_rounded : Icons.mic_rounded,
+          color: DopamineTokens.inkFor(accent),
           size: 38,
         ),
       ),
@@ -337,6 +377,7 @@ class _ConfirmationCard extends StatelessWidget {
 
     return AuroraSurface(
       padding: const EdgeInsets.all(18),
+      accent: DopamineTokens.yellow,
       child: Padding(
         padding: EdgeInsets.zero,
         child: Column(
@@ -430,7 +471,16 @@ class _DetailRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 20),
+        Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: DopamineTokens.cyan,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: DopamineTokens.orange, width: 2),
+          ),
+          child: Icon(icon, size: 20, color: DopamineTokens.cosmic),
+        ),
         const SizedBox(width: 10),
         Expanded(child: Text(value)),
       ],

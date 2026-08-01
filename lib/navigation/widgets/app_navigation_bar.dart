@@ -1,6 +1,7 @@
 import 'package:clock_app/navigation/data/tabs.dart';
 import 'package:clock_app/navigation/types/tab.dart';
 import 'package:clock_app/theme/aurora/aurora_surface.dart';
+import 'package:clock_app/theme/dopamine/dopamine_tokens.dart';
 import 'package:flutter/material.dart' hide Tab;
 
 class AppNavigationBar extends StatefulWidget {
@@ -18,7 +19,6 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
   @override
   Widget build(BuildContext context) {
     final List<Tab> tabs = getTabs(context);
-    final scheme = Theme.of(context).colorScheme;
     final reduceMotion = MediaQuery.of(context).disableAnimations;
 
     return SafeArea(
@@ -28,7 +28,8 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
         height: 66,
         child: AuroraSurface(
           borderRadius: BorderRadius.circular(28),
-          padding: const EdgeInsets.all(6),
+          padding: const EdgeInsets.all(4),
+          accent: DopamineTokens.cyan,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -42,19 +43,22 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                       borderRadius: BorderRadius.circular(22),
                       onTap: () => widget.onTabSelected(index),
                       child: AnimatedContainer(
-                        height: 54,
+                        height: 56,
                         duration: reduceMotion
                             ? Duration.zero
                             : const Duration(milliseconds: 300),
                         curve: Curves.easeOutCubic,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(22),
-                          gradient: widget.selectedTabIndex == index
-                              ? LinearGradient(
-                                  colors: [
-                                    scheme.primary,
-                                    scheme.tertiary,
-                                  ],
+                          color: widget.selectedTabIndex == index
+                              ? DopamineTokens.accentFor(index)
+                              : Colors.transparent,
+                          border: widget.selectedTabIndex == index
+                              ? Border.all(
+                                  color: DopamineTokens.clashFor(
+                                    DopamineTokens.accentFor(index),
+                                  ),
+                                  width: 2,
                                 )
                               : null,
                         ),
@@ -66,8 +70,10 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                               tabs[index].icon,
                               size: 22,
                               color: widget.selectedTabIndex == index
-                                  ? scheme.onPrimary
-                                  : scheme.onSurfaceVariant,
+                                  ? DopamineTokens.inkFor(
+                                      DopamineTokens.accentFor(index),
+                                    )
+                                  : DopamineTokens.accentFor(index),
                             ),
                             const SizedBox(height: 3),
                             Text(
@@ -78,10 +84,13 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                                   .textTheme
                                   .labelSmall
                                   ?.copyWith(
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: .3,
                                     color: widget.selectedTabIndex == index
-                                        ? scheme.onPrimary
-                                        : scheme.onSurfaceVariant,
+                                        ? DopamineTokens.inkFor(
+                                            DopamineTokens.accentFor(index),
+                                          )
+                                        : DopamineTokens.white,
                                   ),
                             ),
                           ],
