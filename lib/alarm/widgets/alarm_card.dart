@@ -140,6 +140,23 @@ class _AlarmCardState extends State<AlarmCard> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
         children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 280),
+            width: 5,
+            height: 72,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              gradient: widget.alarm.isEnabled
+                  ? LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [colorScheme.primary, colorScheme.tertiary],
+                    )
+                  : null,
+              color: widget.alarm.isEnabled ? null : colorScheme.outlineVariant,
+            ),
+          ),
+          const SizedBox(width: 14),
           Expanded(
             flex: 999,
             child: Padding(

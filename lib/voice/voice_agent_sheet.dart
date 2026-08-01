@@ -1,7 +1,9 @@
 import 'package:clock_app/voice/alarm_mapper.dart';
 import 'package:clock_app/voice/local_alarm_parser.dart';
 import 'package:clock_app/voice/parsed_alarm.dart';
+import 'package:clock_app/theme/aurora/aurora_surface.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -163,10 +165,12 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return SafeArea(
-      child: Padding(
+      top: false,
+      child: AuroraSurface(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         padding: EdgeInsets.fromLTRB(
           24,
-          16,
+          14,
           24,
           24 + MediaQuery.viewInsetsOf(context).bottom,
         ),
@@ -176,41 +180,48 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
           children: [
             Center(
               child: Container(
-                width: 40,
-                height: 4,
+                width: 44,
+                height: 5,
                 decoration: BoxDecoration(
                   color: theme.colorScheme.outlineVariant,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(3),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            Icon(
-              isListening ? Icons.mic_rounded : Icons.alarm_add_rounded,
-              size: 44,
-              color: theme.colorScheme.primary,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              _title,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleLarge,
+            const SizedBox(height: 24),
+            _VoiceOrb(listening: isListening, processing: isProcessing),
+            const SizedBox(height: 16),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 280),
+              child: Text(
+                _title,
+                key: ValueKey(_state),
+                textAlign: TextAlign.center,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -.4,
+                ),
+              ),
             ),
             const SizedBox(height: 12),
             if (_transcript.isNotEmpty)
               Text(
                 '"$_transcript"',
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge,
-              ),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  height: 1.4,
+                ),
+              ).animate().fadeIn(),
             if (isListening && _transcript.isEmpty)
-              const Text(
+              Text(
                 'Try "Remind me every day at 7 AM to cook soya and eggs."',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
               ),
             if (isProcessing) ...[
               const SizedBox(height: 24),
-              const Center(child: CircularProgressIndicator()),
+              const Center(child: LinearProgressIndicator()),
             ],
             if (_state == _VoiceAgentState.missingTime) ...[
               const SizedBox(height: 20),
@@ -222,7 +233,10 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
             ],
             if (isComplete && _parsedAlarm != null) ...[
               const SizedBox(height: 20),
-              _ConfirmationCard(alarm: _parsedAlarm!),
+              _ConfirmationCard(alarm: _parsedAlarm!)
+                  .animate()
+                  .fadeIn(duration: 300.ms)
+                  .slideY(begin: .08, end: 0),
               const SizedBox(height: 16),
               FilledButton.icon(
                 onPressed: _saveAlarm,
@@ -253,16 +267,61 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
   String get _title {
     switch (_state) {
       case _VoiceAgentState.listening:
-        return 'Listening...';
+        return "I'm listening";
       case _VoiceAgentState.processing:
-        return 'Creating your alarm...';
+        return 'Building your alarm';
       case _VoiceAgentState.missingTime:
         return 'What time should I use?';
       case _VoiceAgentState.complete:
-        return 'Confirm alarm';
+        return 'Everything looks good';
       case _VoiceAgentState.error:
-        return 'Something went wrong';
+        return "Let's try that again";
     }
+  }
+}
+
+class _VoiceOrb extends StatelessWidget {
+  const _VoiceOrb({required this.listening, required this.processing});
+
+  final bool listening;
+  final bool processing;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final reduceMotion = MediaQuery.of(context).disableAnimations;
+    Widget orb = Center(
+      child: Container(
+        width: 88,
+        height: 88,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [scheme.primary, scheme.tertiary],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: scheme.primary.withOpacity(.38),
+              blurRadius: 34,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: Icon(
+          processing ? Icons.auto_awesome_rounded : Icons.mic_rounded,
+          color: scheme.onPrimary,
+          size: 38,
+        ),
+      ),
+    );
+    if (listening && !reduceMotion) {
+      orb = orb
+          .animate(onPlay: (controller) => controller.repeat(reverse: true))
+          .scaleXY(begin: .96, end: 1.05, duration: 900.ms);
+    }
+    return orb;
   }
 }
 
@@ -276,9 +335,10 @@ class _ConfirmationCard extends StatelessWidget {
     final time = TimeOfDay(hour: alarm.hour!, minute: alarm.minute!);
     final recurrence = _recurrenceDescription(context);
 
-    return Card(
+    return AuroraSurface(
+      padding: const EdgeInsets.all(18),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

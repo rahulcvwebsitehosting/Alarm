@@ -20,10 +20,11 @@ import 'package:clock_app/common/widgets/time_picker.dart';
 import 'package:clock_app/navigation/types/quick_action_controller.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
+import 'package:clock_app/theme/aurora/aurora_surface.dart';
 import 'package:clock_app/voice/voice_agent_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class AlarmScreen extends StatefulWidget {
   const AlarmScreen({super.key, this.actionController});
@@ -131,10 +132,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
       DateTime? nextScheduleDateTime = alarm.currentScheduleDateTime;
       if (nextScheduleDateTime == null) return;
       ScaffoldMessenger.of(context).showSnackBar(getThemedSnackBar(
-      context,
-          getNewAlarmText(context, alarm),
-          fab: true,
-          navBar: true));
+          context, getNewAlarmText(context, alarm),
+          fab: true, navBar: true));
     });
   }
 
@@ -202,6 +201,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
     final alarmSaved = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withOpacity(.55),
       builder: (_) => const VoiceAgentSheet(),
     );
     if (alarmSaved == true) {
@@ -323,7 +325,10 @@ class _AlarmScreenState extends State<AlarmScreen> {
             setState(() {});
           },
           isSelectable: true,
-          // header: getNextAlarmWidget(),
+          header: _AlarmHero(
+            nextAlarm: nextAlarm,
+            onVoice: _openVoiceAgent,
+          ),
           listFilters: _getListFilterItems(),
           customActions: _getCustomActions(),
           sortOptions: _showSort.value ? alarmSortOptions : [],
@@ -347,5 +352,97 @@ class _AlarmScreenState extends State<AlarmScreen> {
           )
       ],
     );
+  }
+}
+
+class _AlarmHero extends StatelessWidget {
+  const _AlarmHero({required this.nextAlarm, required this.onVoice});
+
+  final Alarm? nextAlarm;
+  final VoidCallback onVoice;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final schedule = nextAlarm?.currentScheduleDateTime;
+    final time = schedule == null
+        ? '--:--'
+        : MaterialLocalizations.of(context).formatTimeOfDay(
+            TimeOfDay.fromDateTime(schedule),
+          );
+    final date = schedule == null
+        ? 'Say it naturally. Your phone understands.'
+        : MaterialLocalizations.of(context).formatMediumDate(schedule);
+
+    return AuroraSurface(
+      margin: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+      padding: const EdgeInsets.all(20),
+      emphasized: true,
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  schedule == null ? 'READY WHEN YOU ARE' : 'NEXT ALARM',
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: scheme.primary,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.3,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  time,
+                  style: theme.textTheme.displayMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -1.8,
+                    height: 1,
+                  ),
+                ),
+                const SizedBox(height: 7),
+                Text(
+                  date,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Semantics(
+            button: true,
+            label: 'Create alarm with voice',
+            child: InkWell(
+              borderRadius: BorderRadius.circular(22),
+              onTap: onVoice,
+              child: Ink(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [scheme.primary, scheme.tertiary],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: scheme.primary.withOpacity(.35),
+                      blurRadius: 24,
+                    ),
+                  ],
+                ),
+                child:
+                    Icon(Icons.mic_rounded, color: scheme.onPrimary, size: 30),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ).animate().fadeIn(duration: 420.ms).slideY(begin: .08, end: 0);
   }
 }

@@ -39,24 +39,18 @@ ThemeData getTheme(
     {ColorScheme? colorScheme,
     ColorSchemeData? colorSchemeData,
     StyleTheme? styleTheme}) {
-SettingGroup appearanceSettings = appSettings
-      .getGroup("Appearance");
-      SettingGroup colorSettings = appearanceSettings.getGroup("Colors");
-      SettingGroup styleSettings = appearanceSettings.getGroup("Style");
+  SettingGroup appearanceSettings = appSettings.getGroup("Appearance");
+  SettingGroup colorSettings = appearanceSettings.getGroup("Colors");
+  SettingGroup styleSettings = appearanceSettings.getGroup("Style");
 
-  styleTheme ??= styleSettings.getSetting("Style Theme")
-      .value;
+  styleTheme ??= styleSettings.getSetting("Style Theme").value;
 
   colorSchemeData ??= colorScheme != null
       ? getColorSchemeData(colorScheme)
-      : colorSettings.getSetting("Color Scheme")
-          .value;
+      : colorSettings.getSetting("Color Scheme").value;
 
-  bool useMaterialYou = colorSettings.getSetting("Use Material You")
-      .value;
-  bool useMaterialStyle = styleSettings.getSetting("Use Material Style")
-      .value;
-
+  bool useMaterialYou = colorSettings.getSetting("Use Material You").value;
+  bool useMaterialStyle = styleSettings.getSetting("Use Material Style").value;
 
   if (styleTheme == null || colorSchemeData == null) {
     return defaultTheme;
@@ -65,17 +59,30 @@ SettingGroup appearanceSettings = appSettings
     borderRadius: BorderRadius.circular(styleTheme.borderRadius),
   );
 
+  final resolvedScheme = colorScheme ?? getColorScheme(colorSchemeData);
+
   return defaultTheme.copyWith(
-    colorScheme: colorScheme ?? getColorScheme(colorSchemeData),
+    colorScheme: resolvedScheme,
     scaffoldBackgroundColor: colorSchemeData.background,
     cardColor: colorSchemeData.card,
     radioTheme: getRadioTheme(colorSchemeData),
     dialogBackgroundColor: colorSchemeData.card,
     bottomSheetTheme: getBottomSheetTheme(colorSchemeData, styleTheme),
-    textTheme: defaultTheme.textTheme.apply(
-      bodyColor: colorSchemeData.onBackground,
-      displayColor: colorSchemeData.onBackground,
-    ),
+    textTheme: defaultTheme.textTheme
+        .apply(
+          bodyColor: colorSchemeData.onBackground,
+          displayColor: colorSchemeData.onBackground,
+        )
+        .copyWith(
+          headlineSmall: defaultTheme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+            letterSpacing: -.35,
+          ),
+          titleLarge: defaultTheme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+            letterSpacing: -.2,
+          ),
+        ),
     splashColor: colorSchemeData.background,
     snackBarTheme: getSnackBarTheme(colorSchemeData, styleTheme),
     inputDecorationTheme: getInputTheme(colorSchemeData, styleTheme),
@@ -83,6 +90,28 @@ SettingGroup appearanceSettings = appSettings
     switchTheme: getSwitchTheme(colorSchemeData),
     sliderTheme: getSliderTheme(colorSchemeData),
     cardTheme: defaultTheme.cardTheme.copyWith(shape: shape),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        minimumSize: const Size(48, 54),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        textStyle: const TextStyle(fontWeight: FontWeight.w700),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(48, 54),
+        side: BorderSide(color: resolvedScheme.outlineVariant),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        textStyle: const TextStyle(fontWeight: FontWeight.w600),
+      ),
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(minimumSize: const Size(48, 48)),
+    ),
     timePickerTheme: defaultTheme.timePickerTheme.copyWith(
       shape: shape,
       dayPeriodShape: shape,
@@ -101,11 +130,11 @@ SettingGroup appearanceSettings = appSettings
                 borderWidth: styleTheme.borderWidth,
               ) ??
           const ThemeStyleExtension(),
-          defaultTheme.extension<ThemeSettingExtension>()?.copyWith(
+      defaultTheme.extension<ThemeSettingExtension>()?.copyWith(
                 useMaterialYou: useMaterialYou,
                 useMaterialStyle: useMaterialStyle,
-              ) ?? 
-              const ThemeSettingExtension(),
+              ) ??
+          const ThemeSettingExtension(),
     ],
   );
 }

@@ -14,6 +14,8 @@ into scheduled alarms without sending transcripts to an AI service.
 - Daily, weekday, weekend, weekly, interval, monthly, yearly, date, and one-time schedules
 - Live on-device speech transcription
 - Fully local command parsing with no AI API, account, or API key
+- Aurora glass interface with smooth, accessibility-aware motion
+- Resolution-independent visuals that remain crisp on high-density and 4K displays
 - Custom alarm labels, melodies, vibration, snooze rules, and dismissal tasks
 - Multiple timers, presets, stopwatch laps, and world clocks
 - Material You and customizable themes

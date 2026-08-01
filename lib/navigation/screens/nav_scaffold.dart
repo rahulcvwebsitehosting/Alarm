@@ -4,7 +4,6 @@ import 'dart:isolate';
 import 'package:clock_app/alarm/logic/new_alarm_snackbar.dart';
 import 'package:clock_app/alarm/types/alarm.dart';
 import 'package:clock_app/common/utils/snackbar.dart';
-import 'package:clock_app/common/widgets/card_container.dart';
 import 'package:clock_app/icons/flux_icons.dart';
 import 'package:clock_app/navigation/data/tabs.dart';
 import 'package:clock_app/navigation/types/quick_action_controller.dart';
@@ -16,12 +15,11 @@ import 'package:clock_app/settings/screens/settings_group_screen.dart';
 import 'package:clock_app/settings/types/setting.dart';
 import 'package:clock_app/system/logic/handle_intents.dart';
 import 'package:clock_app/system/logic/quick_actions.dart';
-import 'package:clock_app/theme/types/theme_extension.dart';
+import 'package:clock_app/theme/aurora/aurora_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:material_color_utilities/palettes/tonal_palette.dart';
 import 'package:receive_intent/receive_intent.dart' as intent_handler;
 
 // The callback function should always be a top-level function.
@@ -187,112 +185,106 @@ class _NavScaffoldState extends State<NavScaffold> {
     final tabs = getTabs(context, quickActionController);
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
-    ThemeSettingExtension themeSettings =
-        theme.extension<ThemeSettingExtension>()!;
     ColorScheme colorScheme = theme.colorScheme;
-
-    TonalPalette tonalPalette = toTonalPalette(colorScheme.surface.value);
-
-    Color materialNavColor = themeSettings.useMaterialYou
-        ? Color(tonalPalette
-            .get(Theme.of(context).brightness == Brightness.light ? 96 : 15))
-        : colorScheme.surface;
 
     return WithForegroundTask(
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: orientation == Orientation.portrait
             ? AppTopBar(
-                titleWidget: Text(
-                  tabs[_selectedTabIndex].title,
-                  style: textTheme.titleMedium?.copyWith(
-                    color: colorScheme.onBackground.withOpacity(0.6),
+                titleWidget: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 280),
+                  transitionBuilder: (child, animation) => FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, .18),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    ),
+                  ),
+                  child: Text(
+                    tabs[_selectedTabIndex].title,
+                    key: ValueKey(_selectedTabIndex),
+                    style: textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -.4,
+                    ),
                   ),
                 ),
-                systemNavBarColor:
-                    themeSettings.useMaterialStyle ? materialNavColor : null,
+                systemNavBarColor: Colors.transparent,
                 actions: [
-                  IconButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SettingGroupScreen(
-                                  settingGroup: appSettings)));
-                    },
-                    icon: const Icon(FluxIcons.settings,
-                        semanticLabel: "Settings"),
-                    color: colorScheme.onBackground.withOpacity(0.8),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: IconButton.filledTonal(
+                      tooltip: 'Settings',
+                      onPressed: _openSettings,
+                      icon: const Icon(FluxIcons.settings,
+                          semanticLabel: 'Settings'),
+                    ),
                   ),
                 ],
               )
             : null,
         bottomNavigationBar: orientation == Orientation.portrait
-            ? themeSettings.useMaterialStyle
-                ? NavigationBar(
-                    labelBehavior:
-                        NavigationDestinationLabelBehavior.onlyShowSelected,
-                    selectedIndex: _selectedTabIndex,
-                    backgroundColor: materialNavColor,
-                    onDestinationSelected: _onTabSelected,
-                    destinations: <Widget>[
-                      for (final tab in tabs)
-                        NavigationDestination(
-                          icon: Icon(tab.icon),
-                          label: tab.title,
-                        )
-                    ],
-                  )
-                : AppNavigationBar(
-                    selectedTabIndex: _selectedTabIndex,
-                    onTabSelected: _onTabSelected,
-                  )
+            ? AppNavigationBar(
+                selectedTabIndex: _selectedTabIndex,
+                onTabSelected: _onTabSelected,
+              )
             : null,
         extendBody: false,
-        body: SafeArea(
-          child: Row(
-            children: [
-              if (orientation == Orientation.landscape)
-                NavigationRail(
-                  destinations: [
-                    for (final tab in tabs)
-                      NavigationRailDestination(
-                        icon: Icon(tab.icon),
-                        label: Text(tab.title),
-                      )
-                  ],
-                  leading: Text(tabs[_selectedTabIndex].title,
-                      style: textTheme.headlineSmall?.copyWith(
-                        color: colorScheme.onBackground.withOpacity(0.6),
-                      )),
-                  trailing: IconButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SettingGroupScreen(
-                                  settingGroup: appSettings)));
-                    },
-                    icon: const Icon(FluxIcons.settings,
-                        semanticLabel: "Settings"),
-                    color: colorScheme.onBackground.withOpacity(0.8),
+        body: AuroraBackground(
+          child: SafeArea(
+            bottom: orientation == Orientation.landscape,
+            child: Row(
+              children: [
+                if (orientation == Orientation.landscape)
+                  NavigationRail(
+                    destinations: [
+                      for (final tab in tabs)
+                        NavigationRailDestination(
+                          icon: Icon(tab.icon),
+                          label: Text(tab.title),
+                        )
+                    ],
+                    leading: Text(tabs[_selectedTabIndex].title,
+                        style: textTheme.headlineSmall?.copyWith(
+                          color: colorScheme.onBackground.withOpacity(0.6),
+                        )),
+                    trailing: IconButton.filledTonal(
+                      onPressed: _openSettings,
+                      icon: const Icon(FluxIcons.settings,
+                          semanticLabel: "Settings"),
+                      color: colorScheme.onBackground.withOpacity(0.8),
+                    ),
+                    selectedIndex: _selectedTabIndex,
+                    onDestinationSelected: _onTabSelected,
                   ),
-                  selectedIndex: _selectedTabIndex,
-                  onDestinationSelected: _onTabSelected,
+                Expanded(
+                  child: PageView(
+                      controller: _controller,
+                      onPageChanged: _handlePageViewChanged,
+                      physics:
+                          swipeActionSetting.value == SwipeAction.cardActions
+                              ? const NeverScrollableScrollPhysics()
+                              : null,
+                      children: tabs.map((tab) => tab.widget).toList()),
                 ),
-              Expanded(
-                child: PageView(
-                    controller: _controller,
-                    onPageChanged: _handlePageViewChanged,
-                    physics: swipeActionSetting.value == SwipeAction.cardActions
-                        ? const NeverScrollableScrollPhysics()
-                        : null,
-                    children: tabs.map((tab) => tab.widget).toList()),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _openSettings() {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SettingGroupScreen(settingGroup: appSettings),
       ),
     );
   }

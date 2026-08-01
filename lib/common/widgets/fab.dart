@@ -1,4 +1,3 @@
-import 'package:clock_app/common/widgets/card_container.dart';
 import 'package:clock_app/icons/flux_icons.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
@@ -76,16 +75,41 @@ class _FABState extends State<FAB> {
       left: position == FabPosition.bottomLeft
           ? 16 + (widget.index * 24 * widget.size) + widget.index * 36
           : null,
-      child: CardContainer(
-        elevationMultiplier: 2,
-        color: colorScheme.primary,
-        onTap: widget.onPressed,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Icon(
-            widget.icon,
-            color: colorScheme.onPrimary,
-            size: 24 * widget.size,
+      child: Semantics(
+        button: true,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [colorScheme.primary, colorScheme.tertiary],
+            ),
+            border: Border.all(
+              color: colorScheme.onPrimary.withOpacity(.18),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: colorScheme.primary.withOpacity(.32),
+                blurRadius: 24,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(22),
+              onTap: widget.onPressed,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Icon(
+                  widget.icon,
+                  color: colorScheme.onPrimary,
+                  size: 24 * widget.size,
+                ),
+              ),
+            ),
           ),
         ),
       ),

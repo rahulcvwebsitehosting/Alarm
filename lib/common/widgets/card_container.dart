@@ -62,7 +62,7 @@ class CardContainer extends StatelessWidget {
       // duration: const Duration(milliseconds: 100),
       alignment: alignment,
       margin: margin ?? const EdgeInsets.all(4),
-      clipBehavior: Clip.hardEdge,
+      clipBehavior: Clip.antiAlias,
       decoration: getCardDecoration(
         context,
         color: cardColor,

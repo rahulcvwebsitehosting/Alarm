@@ -1,8 +1,6 @@
-import 'package:clock_app/common/widgets/card_container.dart';
 import 'package:clock_app/navigation/data/tabs.dart';
 import 'package:clock_app/navigation/types/tab.dart';
-import 'package:clock_app/navigation/widgets/nav_bar.dart';
-import 'package:clock_app/navigation/widgets/nav_bar_item.dart';
+import 'package:clock_app/theme/aurora/aurora_surface.dart';
 import 'package:flutter/material.dart' hide Tab;
 
 class AppNavigationBar extends StatefulWidget {
@@ -17,38 +15,80 @@ class AppNavigationBar extends StatefulWidget {
 }
 
 class _AppNavigationBarState extends State<AppNavigationBar> {
-
-
   @override
   Widget build(BuildContext context) {
-        List<Tab> tabs = getTabs(context);
+    final List<Tab> tabs = getTabs(context);
+    final scheme = Theme.of(context).colorScheme;
+    final reduceMotion = MediaQuery.of(context).disableAnimations;
 
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 4.0, top: 0),
-      child: CardContainer(
-        elevationMultiplier: 2,
-        // color: Colors.red,
-        child: BottomNavBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          items: [
-            for (final tab in tabs)
-              BottomNavBarItem(
-                icon: Icon(tab.icon),
-                label: tab.title,
-              )
-          ],
-          currentIndex: widget.selectedTabIndex,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor:
-              Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
-          showUnselectedLabels: false,
-          selectedLabelStyle: Theme.of(context).textTheme.titleSmall,
-          unselectedLabelStyle: Theme.of(context).textTheme.titleSmall,
-          iconSize: 24,
-          type: BottomNavBarType.fixed,
-          onTap: widget.onTabSelected,
+      padding: const EdgeInsets.fromLTRB(14, 6, 14, 12),
+      child: SafeArea(
+        top: false,
+        child: AuroraSurface(
+          borderRadius: BorderRadius.circular(28),
+          padding: const EdgeInsets.all(6),
+          child: Row(
+            children: [
+              for (var index = 0; index < tabs.length; index++)
+                Expanded(
+                  child: Semantics(
+                    selected: widget.selectedTabIndex == index,
+                    button: true,
+                    label: tabs[index].title,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(22),
+                      onTap: () => widget.onTabSelected(index),
+                      child: AnimatedContainer(
+                        duration: reduceMotion
+                            ? Duration.zero
+                            : const Duration(milliseconds: 300),
+                        curve: Curves.easeOutCubic,
+                        constraints: const BoxConstraints(minHeight: 54),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(22),
+                          gradient: widget.selectedTabIndex == index
+                              ? LinearGradient(
+                                  colors: [
+                                    scheme.primary,
+                                    scheme.tertiary,
+                                  ],
+                                )
+                              : null,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              tabs[index].icon,
+                              size: 22,
+                              color: widget.selectedTabIndex == index
+                                  ? scheme.onPrimary
+                                  : scheme.onSurfaceVariant,
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              tabs[index].title,
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: widget.selectedTabIndex == index
+                                        ? scheme.onPrimary
+                                        : scheme.onSurfaceVariant,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
