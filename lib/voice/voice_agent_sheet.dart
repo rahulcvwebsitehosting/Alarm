@@ -170,7 +170,7 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
       child: AuroraSurface(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         accent: DopamineTokens.cyan,
-        emphasized: true,
+        emphasized: false,
         padding: EdgeInsets.fromLTRB(
           24,
           14,
@@ -188,14 +188,8 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
                   width: 52,
                   height: 7,
                   decoration: BoxDecoration(
-                    color: DopamineTokens.magenta,
+                    color: DopamineTokens.white.withOpacity(.28),
                     borderRadius: BorderRadius.circular(4),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: DopamineTokens.yellow,
-                        offset: Offset(3, 3),
-                      ),
-                    ],
                   ),
                 ),
                 const Spacer(),
@@ -204,11 +198,10 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close_rounded),
                   style: IconButton.styleFrom(
-                    foregroundColor: DopamineTokens.cosmic,
-                    backgroundColor: DopamineTokens.yellow,
-                    side: const BorderSide(
-                      color: DopamineTokens.magenta,
-                      width: 3,
+                    foregroundColor: DopamineTokens.white,
+                    backgroundColor: DopamineTokens.surfaceStrong,
+                    side: BorderSide(
+                      color: DopamineTokens.white.withOpacity(.16),
                     ),
                   ),
                 ),
@@ -226,12 +219,7 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
                 style: theme.textTheme.headlineSmall?.copyWith(
                   color: DopamineTokens.white,
                   fontSize: 26,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -.7,
-                  shadows: const [
-                    Shadow(color: DopamineTokens.purple, offset: Offset(2, 2)),
-                    Shadow(color: DopamineTokens.magenta, offset: Offset(4, 4)),
-                  ],
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
@@ -242,7 +230,9 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
                 decoration: BoxDecoration(
                   color: DopamineTokens.surface,
                   borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: DopamineTokens.orange, width: 3),
+                  border: Border.all(
+                    color: DopamineTokens.white.withOpacity(.14),
+                  ),
                 ),
                 child: Text(
                   '“$_transcript”',
@@ -345,7 +335,7 @@ class _VoiceOrb extends StatelessWidget {
           color: accent,
           border: Border.all(
             color: DopamineTokens.clashFor(accent),
-            width: 4,
+            width: 1.5,
           ),
           boxShadow: DopamineTokens.stackedShadow(accent, emphasized: true),
         ),
@@ -477,7 +467,9 @@ class _DetailRow extends StatelessWidget {
           decoration: BoxDecoration(
             color: DopamineTokens.cyan,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: DopamineTokens.orange, width: 2),
+            border: Border.all(
+              color: DopamineTokens.white.withOpacity(.16),
+            ),
           ),
           child: Icon(icon, size: 20, color: DopamineTokens.cosmic),
         ),

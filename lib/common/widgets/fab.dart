@@ -59,7 +59,6 @@ class _FABState extends State<FAB> {
     ThemeSettingExtension themeSettings =
         theme.extension<ThemeSettingExtension>()!;
     final accent = DopamineTokens.accentFor(widget.index);
-    final clash = DopamineTokens.clashFor(accent);
 
     final position = _leftHandedMode.value
         ? widget.position == FabPosition.bottomRight
@@ -86,7 +85,7 @@ class _FABState extends State<FAB> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(DopamineTokens.radiusMd),
             color: accent,
-            border: Border.all(color: clash, width: 3),
+            border: Border.all(color: DopamineTokens.white.withOpacity(.18)),
             boxShadow: DopamineTokens.stackedShadow(accent, emphasized: true),
           ),
           child: Material(

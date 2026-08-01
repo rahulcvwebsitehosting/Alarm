@@ -1,12 +1,12 @@
-# Alarm Dopamine Design System
+# Alarm Vibrant Dark Design System
 
 This document is the visual source of truth for the Flutter application.
 
 ## Personality
 
-Dark dopamine maximalism: energetic, joyful, deliberately asymmetric, and
-high-contrast. Decoration must never reduce alarm readability or obscure a
-primary action.
+Vibrant dark minimalism: energetic but calm, content-first, stable, and
+high-contrast. Color highlights primary actions and state without competing
+with alarm readability.
 
 ## Tokens
 
@@ -30,14 +30,12 @@ feature widgets.
 
 ## Composition
 
-- Rotate the five accents across repeated cards and navigation destinations.
-- Pair accent backgrounds with a clashing border color.
-- Use a maximum of three shadow layers: one glow and two hard offsets.
-- Layer subtle dots, diagonal stripes, radial glows, and a few vector
-  sparkles over the cosmic background.
-- Use oversized translucent words only as excluded-semantics decoration.
-- Keep body copy white or near-white; accents are for labels and decoration.
-- Use Rubik ExtraBold for display hierarchy and Rubik Regular for body text.
+- Rotate accents across repeated cards only as restrained state cues.
+- Use one subtle elevation shadow and a one-pixel tonal border.
+- Layer sparse dots and low-opacity radial glows over the cosmic background.
+- Keep surfaces unrotated and free of oversized decorative typography.
+- Keep body copy white or near-white; accents are for actions and status.
+- Use Rubik Bold for display hierarchy and Rubik Regular for body text.
 
 ## Native UX Guardrails
 

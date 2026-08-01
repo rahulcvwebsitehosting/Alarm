@@ -207,21 +207,10 @@ class _NavScaffoldState extends State<NavScaffold> {
                     ),
                   ),
                   child: Text(
-                    tabs[_selectedTabIndex].title.toUpperCase(),
+                    tabs[_selectedTabIndex].title,
                     key: ValueKey(_selectedTabIndex),
                     style: textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: .8,
-                      shadows: const [
-                        Shadow(
-                          color: DopamineTokens.purple,
-                          offset: Offset(2, 2),
-                        ),
-                        Shadow(
-                          color: DopamineTokens.magenta,
-                          offset: Offset(4, 4),
-                        ),
-                      ],
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -235,11 +224,10 @@ class _NavScaffoldState extends State<NavScaffold> {
                       icon: const Icon(FluxIcons.settings,
                           semanticLabel: 'Settings'),
                       style: IconButton.styleFrom(
-                        backgroundColor: DopamineTokens.yellow,
-                        foregroundColor: DopamineTokens.cosmic,
-                        side: const BorderSide(
-                          color: DopamineTokens.magenta,
-                          width: 3,
+                        backgroundColor: DopamineTokens.surfaceStrong,
+                        foregroundColor: DopamineTokens.cyan,
+                        side: BorderSide(
+                          color: DopamineTokens.cyan.withOpacity(.45),
                         ),
                       ),
                     ),

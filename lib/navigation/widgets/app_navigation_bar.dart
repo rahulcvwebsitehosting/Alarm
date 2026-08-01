@@ -51,14 +51,12 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(22),
                           color: widget.selectedTabIndex == index
-                              ? DopamineTokens.accentFor(index)
+                              ? DopamineTokens.accentFor(index).withOpacity(.14)
                               : Colors.transparent,
                           border: widget.selectedTabIndex == index
                               ? Border.all(
-                                  color: DopamineTokens.clashFor(
-                                    DopamineTokens.accentFor(index),
-                                  ),
-                                  width: 2,
+                                  color: DopamineTokens.accentFor(index)
+                                      .withOpacity(.70),
                                 )
                               : null,
                         ),
@@ -69,29 +67,28 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                             Icon(
                               tabs[index].icon,
                               size: 22,
-                              color: widget.selectedTabIndex == index
-                                  ? DopamineTokens.inkFor(
-                                      DopamineTokens.accentFor(index),
-                                    )
-                                  : DopamineTokens.accentFor(index),
+                              color: DopamineTokens.accentFor(index),
                             ),
                             const SizedBox(height: 3),
-                            Text(
-                              tabs[index].title,
-                              maxLines: 1,
-                              overflow: TextOverflow.fade,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: .3,
-                                    color: widget.selectedTabIndex == index
-                                        ? DopamineTokens.inkFor(
-                                            DopamineTokens.accentFor(index),
-                                          )
-                                        : DopamineTokens.white,
-                                  ),
+                            Flexible(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  tabs[index].title,
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(
+                                        fontWeight:
+                                            widget.selectedTabIndex == index
+                                                ? FontWeight.w700
+                                                : FontWeight.w500,
+                                        color: DopamineTokens.white,
+                                      ),
+                                ),
+                              ),
                             ),
                           ],
                         ),

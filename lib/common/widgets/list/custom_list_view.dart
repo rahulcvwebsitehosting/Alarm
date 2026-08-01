@@ -379,8 +379,7 @@ class _CustomListViewState<Item extends ListItem>
                           color: DopamineTokens.surfaceStrong.withOpacity(.92),
                           borderRadius: BorderRadius.circular(28),
                           border: Border.all(
-                            color: DopamineTokens.magenta,
-                            width: 3,
+                            color: DopamineTokens.magenta.withOpacity(.45),
                           ),
                           boxShadow: DopamineTokens.stackedShadow(
                             DopamineTokens.magenta,
@@ -393,16 +392,16 @@ class _CustomListViewState<Item extends ListItem>
                               width: 58,
                               height: 58,
                               decoration: BoxDecoration(
-                                color: DopamineTokens.yellow,
+                                color: DopamineTokens.magenta.withOpacity(.16),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: DopamineTokens.cyan,
-                                  width: 3,
+                                  color:
+                                      DopamineTokens.magenta.withOpacity(.55),
                                 ),
                               ),
                               child: const Icon(
                                 Icons.add_rounded,
-                                color: DopamineTokens.cosmic,
+                                color: DopamineTokens.magenta,
                                 size: 32,
                               ),
                             ),
@@ -412,7 +411,7 @@ class _CustomListViewState<Item extends ListItem>
                               textAlign: TextAlign.center,
                               style: textTheme.displaySmall?.copyWith(
                                 color: DopamineTokens.white,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],

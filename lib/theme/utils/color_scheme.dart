@@ -60,7 +60,7 @@ ThemeData getTheme(
   final resolvedData = DopamineTokens.legacyScheme;
   final dopamineShape = RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(DopamineTokens.radiusLg),
-    side: const BorderSide(color: DopamineTokens.magenta, width: 3),
+    side: BorderSide(color: DopamineTokens.magenta.withOpacity(.45)),
   );
 
   return defaultTheme.copyWith(
@@ -100,11 +100,13 @@ ThemeData getTheme(
       fillColor: DopamineTokens.surfaceStrong.withOpacity(.86),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(DopamineTokens.radiusMd),
-        borderSide: const BorderSide(color: DopamineTokens.magenta, width: 3),
+        borderSide: BorderSide(
+          color: DopamineTokens.magenta.withOpacity(.55),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(DopamineTokens.radiusMd),
-        borderSide: const BorderSide(color: DopamineTokens.cyan, width: 4),
+        borderSide: const BorderSide(color: DopamineTokens.cyan, width: 1.5),
       ),
     ),
     popupMenuTheme: getPopupMenuTheme(resolvedData, styleTheme).copyWith(
@@ -117,30 +119,32 @@ ThemeData getTheme(
     cardTheme: defaultTheme.cardTheme.copyWith(shape: dopamineShape),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        minimumSize: const Size(48, 54),
+        minimumSize: const Size(48, 52),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(DopamineTokens.radiusPill),
         ),
         backgroundColor: DopamineTokens.magenta,
         foregroundColor: DopamineTokens.cosmic,
-        side: const BorderSide(color: DopamineTokens.yellow, width: 3),
+        side: BorderSide(color: DopamineTokens.white.withOpacity(.16)),
         textStyle: const TextStyle(
-          fontWeight: FontWeight.w900,
-          letterSpacing: 1.1,
+          fontWeight: FontWeight.w700,
+          letterSpacing: .1,
         ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(48, 54),
-        side: const BorderSide(color: DopamineTokens.cyan, width: 3),
+        minimumSize: const Size(48, 52),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        side: BorderSide(color: DopamineTokens.cyan.withOpacity(.72)),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(DopamineTokens.radiusPill),
         ),
         foregroundColor: DopamineTokens.white,
         textStyle: const TextStyle(
-          fontWeight: FontWeight.w800,
-          letterSpacing: .8,
+          fontWeight: FontWeight.w700,
+          letterSpacing: .1,
         ),
       ),
     ),
@@ -186,11 +190,11 @@ ThemeData getTheme(
     extensions: [
       defaultTheme.extension<ThemeStyleExtension>()?.copyWith(
                 borderRadius: DopamineTokens.radiusLg,
-                shadowElevation: 8,
-                shadowBlurRadius: 18,
-                shadowOpacity: .38,
+                shadowElevation: 3,
+                shadowBlurRadius: 14,
+                shadowOpacity: .20,
                 shadowSpreadRadius: 0,
-                borderWidth: 3,
+                borderWidth: 1,
               ) ??
           const ThemeStyleExtension(),
       defaultTheme.extension<ThemeSettingExtension>()?.copyWith(

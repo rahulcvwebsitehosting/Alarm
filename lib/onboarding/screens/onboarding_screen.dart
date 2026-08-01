@@ -64,7 +64,10 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
                               )));
                 },
                 icon: const Icon(Icons.tune_rounded),
-                label: const Text('OPEN RELIABILITY SETTINGS'),
+                label: const Text(
+                  'Open settings',
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
@@ -79,7 +82,7 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
       showBackButton: false,
       //rtl: true, // Display as right-to-left
       back: const Icon(Icons.arrow_back),
-      skip: const Text('SKIP', style: TextStyle(fontWeight: FontWeight.w900)),
+      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w700)),
       next: const Icon(Icons.arrow_forward),
       done:
           const Text('LET’S GO', style: TextStyle(fontWeight: FontWeight.w900)),

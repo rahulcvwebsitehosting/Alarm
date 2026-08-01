@@ -383,119 +383,81 @@ class _AlarmHero extends StatelessWidget {
       padding: const EdgeInsets.all(22),
       emphasized: true,
       accent: DopamineTokens.magenta,
-      rotation: -.008,
-      child: Stack(
-        clipBehavior: Clip.none,
+      child: Row(
         children: [
-          Positioned(
-            right: -18,
-            top: -28,
-            child: ExcludeSemantics(
-              child: Text(
-                'WAKE',
-                style: theme.textTheme.displayLarge?.copyWith(
-                  color: DopamineTokens.purple.withOpacity(.24),
-                  fontSize: 82,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: DopamineTokens.yellow,
-                        borderRadius: BorderRadius.circular(
-                          DopamineTokens.radiusPill,
-                        ),
-                        border: Border.all(
-                          color: DopamineTokens.cyan,
-                          width: 2,
-                        ),
-                      ),
-                      child: Text(
-                        schedule == null ? 'READY TO GO' : 'NEXT UP',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: DopamineTokens.cosmic,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: DopamineTokens.magenta.withOpacity(.14),
+                    borderRadius: BorderRadius.circular(
+                      DopamineTokens.radiusPill,
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      time,
-                      style: theme.textTheme.displayMedium?.copyWith(
-                        color: DopamineTokens.white,
-                        fontSize: 52,
-                        fontWeight: FontWeight.w900,
-                        shadows: const [
-                          Shadow(
-                            color: DopamineTokens.purple,
-                            offset: Offset(2, 2),
-                          ),
-                          Shadow(
-                            color: DopamineTokens.magenta,
-                            offset: Offset(4, 4),
-                          ),
-                          Shadow(
-                            color: DopamineTokens.cyan,
-                            offset: Offset(6, 6),
-                          ),
-                        ],
-                      ),
+                    border: Border.all(
+                      color: DopamineTokens.magenta.withOpacity(.55),
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      date,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: DopamineTokens.white.withOpacity(.86),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 14),
-              Semantics(
-                button: true,
-                label: 'Create alarm with voice',
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(26),
-                  onTap: onVoice,
-                  child: Ink(
-                    width: 72,
-                    height: 72,
-                    decoration: BoxDecoration(
-                      color: DopamineTokens.cyan,
-                      borderRadius: BorderRadius.circular(26),
-                      border: Border.all(
-                        color: DopamineTokens.orange,
-                        width: 4,
-                      ),
-                      boxShadow: DopamineTokens.stackedShadow(
-                        DopamineTokens.cyan,
-                        emphasized: true,
-                      ),
-                    ),
-                    child: const Icon(
-                      Icons.mic_rounded,
-                      color: DopamineTokens.cosmic,
-                      size: 34,
+                  ),
+                  child: Text(
+                    schedule == null ? 'READY TO GO' : 'NEXT UP',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: DopamineTokens.magenta,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
+                const SizedBox(height: 12),
+                Text(
+                  time,
+                  style: theme.textTheme.displayMedium?.copyWith(
+                    color: DopamineTokens.white,
+                    fontSize: 52,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  date,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: DopamineTokens.white.withOpacity(.86),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 14),
+          Semantics(
+            button: true,
+            label: 'Create alarm with voice',
+            child: InkWell(
+              borderRadius: BorderRadius.circular(26),
+              onTap: onVoice,
+              child: Ink(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: DopamineTokens.cyan,
+                  borderRadius: BorderRadius.circular(26),
+                  border: Border.all(
+                    color: DopamineTokens.white.withOpacity(.20),
+                  ),
+                  boxShadow: DopamineTokens.stackedShadow(
+                    DopamineTokens.cyan,
+                    emphasized: true,
+                  ),
+                ),
+                child: const Icon(
+                  Icons.mic_rounded,
+                  color: DopamineTokens.cosmic,
+                  size: 30,
+                ),
               ),
-            ],
+            ),
           ),
         ],
       ),

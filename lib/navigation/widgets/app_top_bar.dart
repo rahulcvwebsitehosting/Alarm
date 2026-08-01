@@ -45,12 +45,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
                 title!,
                 style: textTheme.titleMedium?.copyWith(
                   color: DopamineTokens.white,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: .6,
-                  shadows: const [
-                    Shadow(color: DopamineTokens.purple, offset: Offset(2, 2)),
-                    Shadow(color: DopamineTokens.magenta, offset: Offset(4, 4)),
-                  ],
+                  fontWeight: FontWeight.w700,
                 ),
               )
             : null);
@@ -62,12 +57,18 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       preferredSize: preferredSize,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: DopamineTokens.cosmic.withOpacity(.96),
-          border: const Border(
-            bottom: BorderSide(color: DopamineTokens.magenta, width: 3),
+          color: DopamineTokens.cosmic.withOpacity(.92),
+          border: Border(
+            bottom: BorderSide(
+              color: DopamineTokens.white.withOpacity(.10),
+            ),
           ),
-          boxShadow: const [
-            BoxShadow(color: DopamineTokens.cyan, offset: Offset(0, 5)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.18),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
           ],
         ),
         child: Padding(

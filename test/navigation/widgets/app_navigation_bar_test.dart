@@ -36,4 +36,38 @@ void main() {
     expect(navigationButtons, findsNWidgets(4));
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('all navigation labels remain visible with large system text',
+      (tester) async {
+    const size = Size(320, 640);
+    await tester.binding.setSurfaceSize(size);
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: MediaQuery(
+          data: const MediaQueryData(
+            size: size,
+            textScaler: TextScaler.linear(2),
+            disableAnimations: true,
+          ),
+          child: Scaffold(
+            bottomNavigationBar: AppNavigationBar(
+              selectedTabIndex: 0,
+              onTabSelected: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Alarm'), findsOneWidget);
+    expect(find.text('Clock'), findsOneWidget);
+    expect(find.text('Timer'), findsOneWidget);
+    expect(find.text('Stopwatch'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }

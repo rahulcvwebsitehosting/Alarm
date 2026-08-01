@@ -28,7 +28,6 @@ class AuroraSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final resolvedAccent = accent ?? DopamineTokens.magenta;
-    final resolvedClash = DopamineTokens.clashFor(resolvedAccent);
     final paddedChild = Padding(
       padding: padding ?? EdgeInsets.zero,
       child: child,
@@ -47,7 +46,9 @@ class AuroraSurface extends StatelessWidget {
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: Transform.rotate(
-        angle: rotation,
+        // Keep the public property for compatibility, but strongly restrain
+        // decorative tilt so content remains visually stable.
+        angle: rotation / 5,
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: borderRadius,
@@ -68,15 +69,15 @@ class AuroraSurface extends StatelessWidget {
                     end: Alignment.bottomRight,
                     colors: [
                       Color.alphaBlend(
-                        resolvedAccent.withOpacity(emphasized ? .25 : .10),
+                        resolvedAccent.withOpacity(emphasized ? .10 : .05),
                         DopamineTokens.surfaceStrong.withOpacity(.94),
                       ),
                       DopamineTokens.surface.withOpacity(.92),
                     ],
                   ),
                   border: Border.all(
-                    color: emphasized ? resolvedClash : resolvedAccent,
-                    width: emphasized ? 4 : 3,
+                    color: resolvedAccent.withOpacity(emphasized ? .72 : .42),
+                    width: emphasized ? 1.5 : 1,
                   ),
                 ),
                 child: content,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:clock_app/theme/types/color_scheme.dart';
 
-/// Central visual language for the app's dopamine-maximalist interface.
+/// Central visual language for the app's vibrant, restrained dark interface.
 abstract final class DopamineTokens {
   static const cosmic = Color(0xFF0D0D1A);
   static const surface = Color(0xFF21143B);
@@ -92,21 +92,18 @@ abstract final class DopamineTokens {
     Color accent, {
     bool emphasized = false,
   }) {
-    final clash = clashFor(accent);
     return [
       BoxShadow(
-        color: accent.withOpacity(emphasized ? .46 : .28),
-        blurRadius: emphasized ? 28 : 18,
-        spreadRadius: emphasized ? 2 : 0,
+        color: Colors.black.withOpacity(emphasized ? .30 : .20),
+        blurRadius: emphasized ? 24 : 14,
+        offset: Offset(0, emphasized ? 10 : 6),
       ),
-      BoxShadow(
-        color: clash.withOpacity(emphasized ? .82 : .58),
-        offset: Offset(emphasized ? 7 : 4, emphasized ? 7 : 4),
-      ),
-      BoxShadow(
-        color: purple.withOpacity(emphasized ? .72 : .44),
-        offset: Offset(emphasized ? 12 : 8, emphasized ? 12 : 8),
-      ),
+      if (emphasized)
+        BoxShadow(
+          color: accent.withOpacity(.10),
+          blurRadius: 24,
+          spreadRadius: -4,
+        ),
     ];
   }
 }

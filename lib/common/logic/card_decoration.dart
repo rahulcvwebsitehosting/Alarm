@@ -13,16 +13,17 @@ BoxDecoration getCardDecoration(BuildContext context,
   final theme = Theme.of(context);
   final resolvedColor = color ?? DopamineTokens.surface;
   final resolvedAccent = accent ?? DopamineTokens.magenta;
-  final clash = DopamineTokens.clashFor(resolvedAccent);
   return BoxDecoration(
     border: isSelected
         ? Border.all(
             color: DopamineTokens.cyan,
-            width: 4,
+            width: 1.5,
             strokeAlign: BorderSide.strokeAlignOutside)
         : Border.all(
-            color: showLightBorder ? clash : resolvedAccent,
-            width: showLightBorder ? 2 : 3,
+            color: showLightBorder
+                ? DopamineTokens.white.withOpacity(.18)
+                : resolvedAccent.withOpacity(.40),
+            width: 1,
             strokeAlign: BorderSide.strokeAlignInside,
           ),
     gradient: LinearGradient(
@@ -30,11 +31,11 @@ BoxDecoration getCardDecoration(BuildContext context,
       end: Alignment.bottomRight,
       colors: [
         Color.alphaBlend(
-          resolvedAccent.withOpacity(.12),
+          resolvedAccent.withOpacity(.05),
           resolvedColor.withOpacity(.96),
         ),
         Color.alphaBlend(
-          DopamineTokens.purple.withOpacity(.14),
+          DopamineTokens.purple.withOpacity(.05),
           DopamineTokens.surfaceStrong.withOpacity(.94),
         ),
       ],

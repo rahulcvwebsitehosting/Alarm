@@ -73,21 +73,20 @@ class _AuroraPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final phase = progress * math.pi * 2;
-    _paintStripes(canvas, size);
     _paintDots(canvas, size);
     _paintGlow(
       canvas,
       size,
       Offset(size.width * (.12 + .08 * math.sin(phase)), size.height * .08),
       size.longestSide * .72,
-      DopamineTokens.magenta.withOpacity(.22),
+      DopamineTokens.magenta.withOpacity(.10),
     );
     _paintGlow(
       canvas,
       size,
       Offset(size.width * (.88 + .06 * math.cos(phase)), size.height * .38),
       size.longestSide * .62,
-      DopamineTokens.cyan.withOpacity(.18),
+      DopamineTokens.cyan.withOpacity(.08),
     );
     _paintGlow(
       canvas,
@@ -95,56 +94,16 @@ class _AuroraPainter extends CustomPainter {
       Offset(
           size.width * (.42 + .12 * math.cos(phase * .7)), size.height * .94),
       size.longestSide * .58,
-      DopamineTokens.purple.withOpacity(.20),
+      DopamineTokens.purple.withOpacity(.10),
     );
-    _paintSparkles(canvas, size, phase);
-  }
-
-  void _paintStripes(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = DopamineTokens.yellow.withOpacity(.045)
-      ..strokeWidth = 8;
-    for (double x = -size.height; x < size.width; x += 42) {
-      canvas.drawLine(
-          Offset(x, 0), Offset(x + size.height, size.height), paint);
-    }
   }
 
   void _paintDots(Canvas canvas, Size size) {
-    final paint = Paint()..color = DopamineTokens.magenta.withOpacity(.13);
-    for (double y = 18; y < size.height; y += 28) {
-      for (double x = 14; x < size.width; x += 28) {
-        canvas.drawCircle(Offset(x, y), 1.35, paint);
+    final paint = Paint()..color = DopamineTokens.white.withOpacity(.035);
+    for (double y = 22; y < size.height; y += 40) {
+      for (double x = 18; x < size.width; x += 40) {
+        canvas.drawCircle(Offset(x, y), 1, paint);
       }
-    }
-  }
-
-  void _paintSparkles(Canvas canvas, Size size, double phase) {
-    final points = <(Offset, Color, double)>[
-      (Offset(size.width * .10, size.height * .16), DopamineTokens.yellow, 7),
-      (Offset(size.width * .86, size.height * .12), DopamineTokens.cyan, 5),
-      (Offset(size.width * .78, size.height * .64), DopamineTokens.orange, 8),
-      (Offset(size.width * .18, size.height * .80), DopamineTokens.magenta, 6),
-    ];
-    for (var i = 0; i < points.length; i++) {
-      final item = points[i];
-      final pulse = .75 + .25 * math.sin(phase + i);
-      final paint = Paint()..color = item.$2.withOpacity(.45 * pulse);
-      final r = item.$3 * pulse;
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromCenter(center: item.$1, width: r * 2, height: r * .7),
-          const Radius.circular(3),
-        ),
-        paint,
-      );
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromCenter(center: item.$1, width: r * .7, height: r * 2),
-          const Radius.circular(3),
-        ),
-        paint,
-      );
     }
   }
 
