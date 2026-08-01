@@ -2,7 +2,7 @@ name: clock_app
 description: A customizable alarm, clock, timer, stopwatch, and voice agent app.
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 0.6.6+34
+version: 0.7.0+35
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -52,7 +52,6 @@ dependencies:
   flex_color_picker: 3.3.0
   url_launcher: ^6.2.2
   flutter_html: ^3.0.0-beta.2
-  http: ^1.2.0
   speech_to_text: ^6.6.0
   introduction_screen: ^3.1.12
   app_settings: ^5.1.1

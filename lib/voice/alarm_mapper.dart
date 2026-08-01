@@ -1,5 +1,6 @@
 import 'package:clock_app/alarm/types/alarm.dart';
 import 'package:clock_app/alarm/types/schedules/daily_alarm_schedule.dart';
+import 'package:clock_app/alarm/types/schedules/dates_alarm_schedule.dart';
 import 'package:clock_app/alarm/types/schedules/once_alarm_schedule.dart';
 import 'package:clock_app/alarm/types/schedules/weekly_alarm_schedule.dart';
 import 'package:clock_app/common/utils/list_storage.dart';
@@ -25,9 +26,16 @@ Future<void> saveParsedAlarm(
     parsedAlarm.label.isEmpty ? 'Voice Alarm' : parsedAlarm.label,
   );
 
-  final scheduleType = _scheduleTypeFor(parsedAlarm.recurrence);
+  final scheduleType = parsedAlarm.date == null
+      ? _scheduleTypeFor(parsedAlarm.recurrence)
+      : DatesAlarmSchedule;
   final typeSetting = alarm.getSetting('Type') as SelectSetting<Type>;
   typeSetting.setValueWithoutNotify(typeSetting.getIndexOfValue(scheduleType));
+
+  if (scheduleType == DatesAlarmSchedule) {
+    final datesSetting = alarm.getSetting('Dates') as DateTimeSetting;
+    datesSetting.setValueWithoutNotify([parsedAlarm.date!]);
+  }
 
   if (scheduleType == DailyAlarmSchedule ||
       scheduleType == WeeklyAlarmSchedule) {

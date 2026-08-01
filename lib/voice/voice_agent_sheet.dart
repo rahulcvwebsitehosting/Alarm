@@ -1,5 +1,5 @@
-import 'package:clock_app/voice/ai_parser.dart';
 import 'package:clock_app/voice/alarm_mapper.dart';
+import 'package:clock_app/voice/local_alarm_parser.dart';
 import 'package:clock_app/voice/parsed_alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
@@ -95,12 +95,12 @@ class _VoiceAgentSheetState extends State<VoiceAgentSheet> {
     if (!mounted) return;
     setState(() => _state = _VoiceAgentState.processing);
 
-    final result = await AiParser.parse(_transcript);
+    final result = LocalAlarmParser.parse(_transcript);
     if (!mounted) return;
 
     if (result == null) {
       _showError(
-        AiParser.failureMessage ??
+        LocalAlarmParser.failureMessage ??
             'Could not understand the alarm. Please try again.',
       );
       return;
@@ -274,9 +274,11 @@ class _ConfirmationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final time = TimeOfDay(hour: alarm.hour!, minute: alarm.minute!);
-    final recurrence = alarm.recurrence == 'weekly' && alarm.days.isNotEmpty
-        ? alarm.days.join(', ')
-        : alarm.recurrence;
+    final recurrence = alarm.date != null
+        ? MaterialLocalizations.of(context).formatFullDate(alarm.date!)
+        : alarm.recurrence == 'weekly' && alarm.days.isNotEmpty
+            ? alarm.days.join(', ')
+            : alarm.recurrence;
 
     return Card(
       child: Padding(

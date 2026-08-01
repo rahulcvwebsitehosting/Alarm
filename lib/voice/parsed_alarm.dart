@@ -5,6 +5,7 @@ class ParsedAlarm {
     required this.recurrence,
     required this.days,
     required this.label,
+    this.date,
   });
 
   final int? hour;
@@ -12,6 +13,7 @@ class ParsedAlarm {
   final String recurrence;
   final List<String> days;
   final String label;
+  final DateTime? date;
 
   bool get isComplete => hour != null && minute != null;
 
@@ -42,6 +44,9 @@ class ParsedAlarm {
               .toList(growable: false)
           : const [],
       label: _toTitleCase(label),
+      date: json['date'] == null
+          ? null
+          : DateTime.tryParse(json['date'].toString()),
     );
   }
 
@@ -51,6 +56,7 @@ class ParsedAlarm {
     String? recurrence,
     List<String>? days,
     String? label,
+    DateTime? date,
   }) {
     return ParsedAlarm(
       hour: hour ?? this.hour,
@@ -58,6 +64,7 @@ class ParsedAlarm {
       recurrence: recurrence ?? this.recurrence,
       days: days ?? this.days,
       label: label ?? this.label,
+      date: date ?? this.date,
     );
   }
 

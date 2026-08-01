@@ -5,35 +5,35 @@
 </div>
 
 Alarm is a customizable Android alarm, clock, timer, and stopwatch app built
-with Flutter. It includes an AI voice agent that turns natural-language
-requests into scheduled alarms.
+with Flutter. Its private, rule-based voice agent turns common spoken commands
+into scheduled alarms without sending transcripts to an AI service.
 
 ## Highlights
 
 - Create alarms by voice using natural language
 - Daily, weekday, weekend, weekly, date, and one-time schedules
 - Live on-device speech transcription
-- Free-model alarm parsing through OpenRouter
+- Fully local command parsing with no AI API, account, or API key
 - Custom alarm labels, melodies, vibration, snooze rules, and dismissal tasks
 - Multiple timers, presets, stopwatch laps, and world clocks
 - Material You and customizable themes
 - Home-screen clock widgets
 
-## Voice alarm setup
+## Offline voice alarms
 
-The voice agent uses `speech_to_text` for transcription and OpenRouter's
-free-model router for alarm parsing. Keep the API key outside source control:
+The voice agent uses the device speech recognizer for transcription. A
+deterministic parser then recognizes times, repeat rules, weekdays, dates, and
+labels directly on the phone. There is no OpenRouter integration or cloud
+language-model dependency.
 
 ```sh
-flutter run --flavor dev \
-  --dart-define=OPENROUTER_API_KEY=your_openrouter_key
+flutter run --flavor dev
 ```
 
 For a release APK:
 
 ```sh
-flutter build apk --release --split-per-abi --flavor prod \
-  --dart-define=OPENROUTER_API_KEY=your_openrouter_key
+flutter build apk --release --split-per-abi --flavor prod
 ```
 
 Official GitHub releases use a persistent Android signing key stored in
@@ -47,8 +47,9 @@ Example voice requests:
 - "Wake me at 6:30 on weekdays."
 - "Set an alarm for Saturday at 9 AM."
 
-The parser uses `openrouter/free`, which routes exclusively to currently
-available free models, with a specific `:free` model as a fallback.
+Supported phrasing includes numeric and spoken times, noon and midnight,
+quarter/half-past expressions, relative alarms, daily/weekday/weekend rules,
+selected weekdays, tomorrow, next weekdays, and calendar dates.
 
 ## Development
 
@@ -56,7 +57,6 @@ Requirements:
 
 - Flutter 3.22 or newer
 - Android SDK
-- An OpenRouter API key for the optional voice-agent feature
 
 Install dependencies and run:
 

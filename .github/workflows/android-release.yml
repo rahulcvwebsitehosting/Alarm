@@ -1,7 +1,10 @@
 name: Android Release
 
 on:
+  workflow_dispatch:
   push:
+    branches:
+      - main
     tags:
       - "v*"
 
@@ -33,8 +36,14 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Verify dependency lockfile
+        run: git diff --exit-code pubspec.lock
+
       - name: Analyze application
         run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Test offline voice parser
+        run: flutter test test/voice/local_alarm_parser_test.dart
 
       - name: Configure permanent release signing
         shell: bash
@@ -57,15 +66,10 @@ jobs:
           } > android/key.properties
 
       - name: Build universal release APK
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: >-
-          flutter build apk
-          --release
-          --flavor prod
-          --dart-define=OPENROUTER_API_KEY="$OPENROUTER_API_KEY"
+        run: flutter build apk --release --flavor prod
 
       - name: Prepare release asset
+        if: startsWith(github.ref, 'refs/tags/v')
         shell: bash
         run: |
           apk_path="$(find build/app/outputs/flutter-apk -maxdepth 1 -name '*release.apk' | head -n 1)"
@@ -74,6 +78,7 @@ jobs:
           sha256sum "Alarm-${GITHUB_REF_NAME}.apk" > "Alarm-${GITHUB_REF_NAME}.apk.sha256"
 
       - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
