@@ -10,6 +10,7 @@ BoxDecoration getCardDecoration(BuildContext context,
     boxShape = BoxShape.rectangle,
     blurStyle = BlurStyle.normal,
     Color? accent}) {
+  final theme = Theme.of(context);
   final resolvedColor = color ?? DopamineTokens.surface;
   final resolvedAccent = accent ?? DopamineTokens.magenta;
   final clash = DopamineTokens.clashFor(resolvedAccent);

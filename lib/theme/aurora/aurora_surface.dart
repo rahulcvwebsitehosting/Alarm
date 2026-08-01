@@ -29,14 +29,20 @@ class AuroraSurface extends StatelessWidget {
   Widget build(BuildContext context) {
     final resolvedAccent = accent ?? DopamineTokens.magenta;
     final resolvedClash = DopamineTokens.clashFor(resolvedAccent);
-    final content = Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: borderRadius,
-        onTap: onTap,
-        child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
-      ),
+    final paddedChild = Padding(
+      padding: padding ?? EdgeInsets.zero,
+      child: child,
     );
+    final content = onTap == null
+        ? paddedChild
+        : Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: borderRadius,
+              onTap: onTap,
+              child: paddedChild,
+            ),
+          );
 
     return Padding(
       padding: margin ?? EdgeInsets.zero,
