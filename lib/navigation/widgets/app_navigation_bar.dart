@@ -21,14 +21,16 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
     final scheme = Theme.of(context).colorScheme;
     final reduceMotion = MediaQuery.of(context).disableAnimations;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 6, 14, 12),
-      child: SafeArea(
-        top: false,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.fromLTRB(14, 6, 14, 12),
+      child: SizedBox(
+        height: 66,
         child: AuroraSurface(
           borderRadius: BorderRadius.circular(28),
           padding: const EdgeInsets.all(6),
           child: Row(
+            mainAxisSize: MainAxisSize.max,
             children: [
               for (var index = 0; index < tabs.length; index++)
                 Expanded(
@@ -40,11 +42,11 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                       borderRadius: BorderRadius.circular(22),
                       onTap: () => widget.onTabSelected(index),
                       child: AnimatedContainer(
+                        height: 54,
                         duration: reduceMotion
                             ? Duration.zero
                             : const Duration(milliseconds: 300),
                         curve: Curves.easeOutCubic,
-                        constraints: const BoxConstraints(minHeight: 54),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(22),
                           gradient: widget.selectedTabIndex == index
@@ -57,6 +59,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                               : null,
                         ),
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
