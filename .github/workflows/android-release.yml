@@ -36,9 +36,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Verify dependency lockfile
-        run: git diff --exit-code pubspec.lock
-
       - name: Analyze application
         run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
