@@ -26,13 +26,14 @@ void main() {
 
     final navSize = tester.getSize(find.byType(AppNavigationBar));
     final contentSize = tester.getSize(find.byKey(const Key('page-content')));
+    final navigationButtons = find.descendant(
+      of: find.byType(AppNavigationBar),
+      matching: find.byType(InkWell),
+    );
 
-    expect(navSize.height, lessThanOrEqualTo(90));
-    expect(contentSize.height, greaterThan(650));
-    expect(find.text('Alarms'), findsOneWidget);
-    expect(find.text('Clock'), findsOneWidget);
-    expect(find.text('Timer'), findsOneWidget);
-    expect(find.text('Stopwatch'), findsOneWidget);
+    expect(navSize.height, inInclusiveRange(78, 90));
+    expect(contentSize.height, greaterThan(700));
+    expect(navigationButtons, findsNWidgets(4));
     expect(tester.takeException(), isNull);
   });
 }
