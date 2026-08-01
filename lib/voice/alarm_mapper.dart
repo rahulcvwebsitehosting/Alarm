@@ -5,6 +5,7 @@ import 'package:clock_app/alarm/types/schedules/once_alarm_schedule.dart';
 import 'package:clock_app/alarm/types/schedules/weekly_alarm_schedule.dart';
 import 'package:clock_app/common/utils/list_storage.dart';
 import 'package:clock_app/settings/types/setting.dart';
+import 'package:clock_app/voice/interval_dates.dart';
 import 'package:clock_app/voice/parsed_alarm.dart';
 import 'package:flutter/material.dart';
 
@@ -26,15 +27,23 @@ Future<void> saveParsedAlarm(
     parsedAlarm.label.isEmpty ? 'Voice Alarm' : parsedAlarm.label,
   );
 
-  final scheduleType = parsedAlarm.date == null
-      ? _scheduleTypeFor(parsedAlarm.recurrence)
-      : DatesAlarmSchedule;
+  final usesExactDates =
+      parsedAlarm.date != null || parsedAlarm.recurrence == 'interval';
+  final scheduleType = usesExactDates
+      ? DatesAlarmSchedule
+      : _scheduleTypeFor(parsedAlarm.recurrence);
   final typeSetting = alarm.getSetting('Type') as SelectSetting<Type>;
   typeSetting.setValueWithoutNotify(typeSetting.getIndexOfValue(scheduleType));
 
   if (scheduleType == DatesAlarmSchedule) {
     final datesSetting = alarm.getSetting('Dates') as DateTimeSetting;
-    datesSetting.setValueWithoutNotify([parsedAlarm.date!]);
+    final dates = parsedAlarm.recurrence == 'interval'
+        ? materializeIntervalDates(parsedAlarm)
+        : [parsedAlarm.date!];
+    if (dates.isEmpty) {
+      throw const FormatException('The interval has no future dates.');
+    }
+    datesSetting.setValueWithoutNotify(dates);
   }
 
   if (scheduleType == DailyAlarmSchedule ||

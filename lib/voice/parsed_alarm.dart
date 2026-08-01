@@ -6,6 +6,10 @@ class ParsedAlarm {
     required this.days,
     required this.label,
     this.date,
+    this.intervalValue,
+    this.intervalUnit,
+    this.monthDay,
+    this.weekOfMonth,
   });
 
   final int? hour;
@@ -14,6 +18,10 @@ class ParsedAlarm {
   final List<String> days;
   final String label;
   final DateTime? date;
+  final int? intervalValue;
+  final String? intervalUnit;
+  final int? monthDay;
+  final int? weekOfMonth;
 
   bool get isComplete => hour != null && minute != null;
 
@@ -26,6 +34,7 @@ class ParsedAlarm {
       'weekdays',
       'weekends',
       'weekly',
+      'interval',
     };
     final recurrence =
         json['recurrence']?.toString().trim().toLowerCase() ?? 'once';
@@ -47,6 +56,10 @@ class ParsedAlarm {
       date: json['date'] == null
           ? null
           : DateTime.tryParse(json['date'].toString()),
+      intervalValue: _parseBoundedInt(json['intervalValue'], 1, 365),
+      intervalUnit: _parseIntervalUnit(json['intervalUnit']),
+      monthDay: _parseSpecialBoundedInt(json['monthDay'], -1, 31),
+      weekOfMonth: _parseSpecialBoundedInt(json['weekOfMonth'], -1, 5),
     );
   }
 
@@ -57,6 +70,10 @@ class ParsedAlarm {
     List<String>? days,
     String? label,
     DateTime? date,
+    int? intervalValue,
+    String? intervalUnit,
+    int? monthDay,
+    int? weekOfMonth,
   }) {
     return ParsedAlarm(
       hour: hour ?? this.hour,
@@ -65,6 +82,10 @@ class ParsedAlarm {
       days: days ?? this.days,
       label: label ?? this.label,
       date: date ?? this.date,
+      intervalValue: intervalValue ?? this.intervalValue,
+      intervalUnit: intervalUnit ?? this.intervalUnit,
+      monthDay: monthDay ?? this.monthDay,
+      weekOfMonth: weekOfMonth ?? this.weekOfMonth,
     );
   }
 
@@ -73,6 +94,27 @@ class ParsedAlarm {
     final parsed = value is int ? value : int.tryParse(value.toString());
     if (parsed == null || parsed < minimum || parsed > maximum) return null;
     return parsed;
+  }
+
+  static int? _parseSpecialBoundedInt(
+    dynamic value,
+    int specialValue,
+    int maximum,
+  ) {
+    if (value == null) return null;
+    final parsed = value is int ? value : int.tryParse(value.toString());
+    if (parsed == specialValue ||
+        (parsed != null && parsed >= 1 && parsed <= maximum)) {
+      return parsed;
+    }
+    return null;
+  }
+
+  static String? _parseIntervalUnit(dynamic value) {
+    final unit = value?.toString().trim().toLowerCase();
+    return const {'days', 'weekdays', 'weeks', 'months', 'years'}.contains(unit)
+        ? unit
+        : null;
   }
 
   static String _toTitleCase(String value) {

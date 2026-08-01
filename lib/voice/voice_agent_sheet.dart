@@ -274,11 +274,7 @@ class _ConfirmationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final time = TimeOfDay(hour: alarm.hour!, minute: alarm.minute!);
-    final recurrence = alarm.date != null
-        ? MaterialLocalizations.of(context).formatFullDate(alarm.date!)
-        : alarm.recurrence == 'weekly' && alarm.days.isNotEmpty
-            ? alarm.days.join(', ')
-            : alarm.recurrence;
+    final recurrence = _recurrenceDescription(context);
 
     return Card(
       child: Padding(
@@ -298,7 +294,7 @@ class _ConfirmationCard extends StatelessWidget {
             const SizedBox(height: 6),
             _DetailRow(
               icon: Icons.repeat_rounded,
-              value: _titleCase(recurrence),
+              value: recurrence,
             ),
           ],
         ),
@@ -306,12 +302,64 @@ class _ConfirmationCard extends StatelessWidget {
     );
   }
 
+  String _recurrenceDescription(BuildContext context) {
+    if (alarm.recurrence == 'interval') {
+      final amount = alarm.intervalValue ?? 1;
+      final rawUnit = alarm.intervalUnit ?? 'days';
+      final unit = amount == 1 && rawUnit.endsWith('s')
+          ? rawUnit.substring(0, rawUnit.length - 1)
+          : rawUnit;
+      var value = amount == 1
+          ? 'Every ${_titleCase(unit)}'
+          : 'Every $amount ${_titleCase(unit)}';
+      if (alarm.weekOfMonth != null && alarm.days.isNotEmpty) {
+        final week = alarm.weekOfMonth == -1
+            ? 'Last'
+            : _ordinal(alarm.weekOfMonth!);
+        value = 'Every Month On The $week ${_titleCase(alarm.days.first)}';
+      } else if (alarm.monthDay != null) {
+        final day = alarm.monthDay == -1
+            ? 'Last Day'
+            : 'Day ${alarm.monthDay}';
+        value = 'Every Month On $day';
+      } else if (alarm.days.isNotEmpty) {
+        value += ' On ${alarm.days.map(_titleCase).join(', ')}';
+      }
+      if (alarm.date != null) {
+        final start =
+            MaterialLocalizations.of(context).formatMediumDate(alarm.date!);
+        value += ' · Starts $start';
+      }
+      return value;
+    }
+    if (alarm.date != null) {
+      return MaterialLocalizations.of(context).formatFullDate(alarm.date!);
+    }
+    if (alarm.recurrence == 'weekly' && alarm.days.isNotEmpty) {
+      return alarm.days.map(_titleCase).join(', ');
+    }
+    return _titleCase(alarm.recurrence);
+  }
+
+  static String _ordinal(int value) {
+    final mod100 = value % 100;
+    final suffix = mod100 >= 11 && mod100 <= 13
+        ? 'th'
+        : switch (value % 10) {
+            1 => 'st',
+            2 => 'nd',
+            3 => 'rd',
+            _ => 'th',
+          };
+    return '$value$suffix';
+  }
+
   static String _titleCase(String value) {
     return value
-        .split(RegExp(r'[\s,]+'))
+        .split(RegExp(r'\s+'))
         .where((part) => part.isNotEmpty)
         .map((part) => '${part[0].toUpperCase()}${part.substring(1)}')
-        .join(', ');
+        .join(' ');
   }
 }
 
