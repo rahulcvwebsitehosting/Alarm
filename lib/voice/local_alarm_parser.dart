@@ -33,9 +33,8 @@ class LocalAlarmParser {
       return null;
     }
     final relativeDateTime = _parseRelativeDateTime(text, reference);
-    final explicitDate = relativeDateTime == null
-        ? _parseExplicitDate(text, reference)
-        : null;
+    final explicitDate =
+        relativeDateTime == null ? _parseExplicitDate(text, reference) : null;
     final time = relativeDateTime == null
         ? _parseClockTime(
             text,
@@ -87,9 +86,7 @@ class LocalAlarmParser {
       recurrence: recurrence.value,
       days: recurrence.days,
       label: _extractLabel(text),
-      date: date == null
-          ? null
-          : DateTime(date.year, date.month, date.day),
+      date: date == null ? null : DateTime(date.year, date.month, date.day),
       intervalValue: recurrence.intervalValue,
       intervalUnit: recurrence.intervalUnit,
       monthDay: recurrence.monthDay,
@@ -222,8 +219,7 @@ class LocalAlarmParser {
         'Repeats shorter than one day are not supported by Alarm yet.',
       );
     }
-    if (RegExp(r'\b(?:alternate|alternating)\s+weekends?\b')
-        .hasMatch(text)) {
+    if (RegExp(r'\b(?:alternate|alternating)\s+weekends?\b').hasMatch(text)) {
       return _Recurrence.interval(
         2,
         'weeks',
@@ -240,10 +236,10 @@ class LocalAlarmParser {
     ).firstMatch(text);
     if (repeatedWeekend != null) {
       final rawAmount = repeatedWeekend.group(1)!;
-      final amount = const {'other', 'alternate', 'alternating'}
-              .contains(rawAmount)
-          ? 2
-          : _numberValue(rawAmount);
+      final amount =
+          const {'other', 'alternate', 'alternating'}.contains(rawAmount)
+              ? 2
+              : _numberValue(rawAmount);
       if (amount != null && amount > 0) {
         return amount == 1
             ? const _Recurrence('weekends', [])
@@ -259,10 +255,10 @@ class LocalAlarmParser {
     ).firstMatch(text);
     if (repeatedWeekday != null) {
       final rawAmount = repeatedWeekday.group(1)!;
-      final amount = const {'other', 'alternate', 'alternating'}
-              .contains(rawAmount)
-          ? 2
-          : _numberValue(rawAmount);
+      final amount =
+          const {'other', 'alternate', 'alternating'}.contains(rawAmount)
+              ? 2
+              : _numberValue(rawAmount);
       if (amount != null && amount > 0) {
         return amount == 1
             ? const _Recurrence('weekdays', [])
@@ -319,7 +315,10 @@ class LocalAlarmParser {
     }
 
     final match = RegExp(
-      r'\b(?:(?:once\s+)?every|each)\s+([a-z0-9\s]+?)\s+(minutes?|hours?|days?|weeks?|months?|years?)\b',
+      '\\b(?:(?:once\\s+)?every|each)\\s+'
+      '((?:a\\s+)?couple(?:\\s+of)?|single|few|several|'
+      '\\d+(?:st|nd|rd|th)?|$_durationNumberPattern)\\s+'
+      '(minutes?|hours?|days?|weeks?|months?|years?)\\b',
     ).firstMatch(text);
     if (match == null) return null;
     final rawAmount = match.group(1)!.trim();
@@ -377,7 +376,8 @@ class LocalAlarmParser {
   }
 
   static _Recurrence? _parseMonthlyWeekday(String text) {
-    const ordinal = r'(first|second|third|fourth|fifth|last|1st|2nd|3rd|4th|5th)';
+    const ordinal =
+        r'(first|second|third|fourth|fifth|last|1st|2nd|3rd|4th|5th)';
     const weekday =
         r'(mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rsday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)';
     final match = RegExp(
@@ -517,8 +517,7 @@ class LocalAlarmParser {
       minutes = 30;
     } else if (RegExp(
       r'\b(?:in|after)\s+(?:a quarter|quarter)(?: of an)?\s+hour\b',
-    )
-        .hasMatch(text)) {
+    ).hasMatch(text)) {
       minutes = 15;
     } else {
       final match = RegExp(
@@ -577,9 +576,7 @@ class LocalAlarmParser {
       );
       if (amount != null && amount > 0) {
         final unit = relativeDay.group(2) ?? relativeDay.group(4)!;
-        final days = unit.startsWith('week')
-            ? amount * 7
-            : amount;
+        final days = unit.startsWith('week') ? amount * 7 : amount;
         return today.add(Duration(days: days));
       }
     }
@@ -625,9 +622,8 @@ class LocalAlarmParser {
     if (numeric != null) {
       final day = int.parse(numeric.group(1)!);
       final month = int.parse(numeric.group(2)!);
-      var year = numeric.group(3) == null
-          ? today.year
-          : int.parse(numeric.group(3)!);
+      var year =
+          numeric.group(3) == null ? today.year : int.parse(numeric.group(3)!);
       if (year < 100) year += 2000;
       var candidate = _validDate(year, month, day);
       if (candidate != null &&
@@ -651,8 +647,8 @@ class LocalAlarmParser {
       'sunday': DateTime.sunday,
     };
     for (final entry in weekdays.entries) {
-      final match = RegExp('\\b(next|this|coming)\\s+${entry.key}\\b')
-          .firstMatch(text);
+      final match =
+          RegExp('\\b(next|this|coming)\\s+${entry.key}\\b').firstMatch(text);
       if (match == null) continue;
       var difference = (entry.value - today.weekday + 7) % 7;
       if ((match.group(1) == 'next' || match.group(1) == 'coming') &&
@@ -757,8 +753,8 @@ class LocalAlarmParser {
     }
     if (day == null || month == null || year == null) return null;
 
-    final hasExplicitYear = dayFirst?.group(3) != null ||
-        monthFirst?.group(3) != null;
+    final hasExplicitYear =
+        dayFirst?.group(3) != null || monthFirst?.group(3) != null;
     if (hasExplicitYear) return _validDate(year, month, day);
     for (var yearOffset = 0; yearOffset < 12; yearOffset++) {
       final candidate = _validDate(year + yearOffset, month, day);
@@ -1043,8 +1039,7 @@ class LocalAlarmParser {
         );
         if (minutesRelative.group(2) == 'to' ||
             minutesRelative.group(2) == 'before') {
-          final total =
-              (resolvedHour * 60 - minuteAmount) % (24 * 60);
+          final total = (resolvedHour * 60 - minuteAmount) % (24 * 60);
           return _ClockTime(total ~/ 60, total % 60);
         }
         final total = resolvedHour * 60 + minuteAmount;
@@ -1149,9 +1144,8 @@ class LocalAlarmParser {
     ).firstMatch(text);
     if (spokenTime != null) {
       final hour = _numberValue(spokenTime.group(1)!);
-      final minute = spokenTime.group(2) == null
-          ? 0
-          : _numberValue(spokenTime.group(2)!);
+      final minute =
+          spokenTime.group(2) == null ? 0 : _numberValue(spokenTime.group(2)!);
       if (hour == null || minute == null) return null;
       return _buildClockTime(
         hour,

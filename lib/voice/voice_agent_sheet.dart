@@ -313,14 +313,11 @@ class _ConfirmationCard extends StatelessWidget {
           ? 'Every ${_titleCase(unit)}'
           : 'Every $amount ${_titleCase(unit)}';
       if (alarm.weekOfMonth != null && alarm.days.isNotEmpty) {
-        final week = alarm.weekOfMonth == -1
-            ? 'Last'
-            : _ordinal(alarm.weekOfMonth!);
+        final week =
+            alarm.weekOfMonth == -1 ? 'Last' : _ordinal(alarm.weekOfMonth!);
         value = 'Every Month On The $week ${_titleCase(alarm.days.first)}';
       } else if (alarm.monthDay != null) {
-        final day = alarm.monthDay == -1
-            ? 'Last Day'
-            : 'Day ${alarm.monthDay}';
+        final day = alarm.monthDay == -1 ? 'Last Day' : 'Day ${alarm.monthDay}';
         value = 'Every Month On $day';
       } else if (alarm.days.isNotEmpty) {
         value += ' On ${alarm.days.map(_titleCase).join(', ')}';

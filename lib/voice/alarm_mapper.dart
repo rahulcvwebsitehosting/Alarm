@@ -48,8 +48,7 @@ Future<void> saveParsedAlarm(
 
   if (scheduleType == DailyAlarmSchedule ||
       scheduleType == WeeklyAlarmSchedule) {
-    final weekdaySetting =
-        alarm.getSetting('Week Days') as ToggleSetting<int>;
+    final weekdaySetting = alarm.getSetting('Week Days') as ToggleSetting<int>;
     final selectedDays = _selectedWeekdays(parsedAlarm);
     weekdaySetting.setValueWithoutNotify(
       List<bool>.generate(

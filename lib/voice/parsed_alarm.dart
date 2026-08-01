@@ -44,8 +44,7 @@ class ParsedAlarm {
     return ParsedAlarm(
       hour: parsedHour,
       minute: parsedMinute,
-      recurrence:
-          validRecurrences.contains(recurrence) ? recurrence : 'once',
+      recurrence: validRecurrences.contains(recurrence) ? recurrence : 'once',
       days: rawDays is List
           ? rawDays
               .map((day) => day.toString().trim().toLowerCase())

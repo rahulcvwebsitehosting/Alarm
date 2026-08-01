@@ -11,16 +11,13 @@ List<DateTime> materializeIntervalDates(
 }) {
   final amount = alarm.intervalValue;
   final unit = alarm.intervalUnit;
-  if (!alarm.isComplete ||
-      amount == null ||
-      amount < 1 ||
-      unit == null) {
+  if (!alarm.isComplete || amount == null || amount < 1 || unit == null) {
     return const [];
   }
 
   final reference = now ?? DateTime.now();
-  var start = alarm.date ??
-      DateTime(reference.year, reference.month, reference.day);
+  var start =
+      alarm.date ?? DateTime(reference.year, reference.month, reference.day);
   final dates = <DateTime>[];
 
   bool isFuture(DateTime date) => DateTime(
@@ -62,9 +59,7 @@ List<DateTime> materializeIntervalDates(
     return dates;
   }
 
-  if (unit == 'months' &&
-      alarm.weekOfMonth != null &&
-      alarm.days.isNotEmpty) {
+  if (unit == 'months' && alarm.weekOfMonth != null && alarm.days.isNotEmpty) {
     final selectedDays = alarm.days
         .map((day) => _weekdayNumbers[day])
         .whereType<int>()
